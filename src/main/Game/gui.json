@@ -1,0 +1,48 @@
+{
+  "translatorWindow": {
+    "bounds": {
+      "width": 998,
+      "height": 432,
+      "x": 268,
+      "y": 43
+    },
+    "originalText": {
+      "fontSize": 1.5,
+      "color": "#FFFFFF"
+    },
+    "translationText": {
+      "fontSize": 1.5,
+      "color": "#FFFFFF",
+      "margin": 0.7
+    },
+    "mecabReading": {
+      "fontSize": 0.6
+    },
+    "mecabText": {
+      "fontSize": 1.5,
+      "fontPadding": 0.1
+    },
+    "sizes": {
+      "/translate": {
+        "x": 192,
+        "y": 86,
+        "width": 1248,
+        "height": 270
+      },
+      "/hook": {
+        "x": 192,
+        "y": 86,
+        "width": 998,
+        "height": 432
+      },
+      "/setting": {
+        "x": 192,
+        "y": 86,
+        "width": 998,
+        "height": 540
+      }
+    },
+    "background": "#000000BD",
+    "renderMode": "transparent"
+  }
+}

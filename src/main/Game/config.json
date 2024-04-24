@@ -1,0 +1,48 @@
+{
+  "localeChangers": {
+    "localeEmulator": {
+      "name": "Locale Emulator",
+      "enable": false,
+      "exec": ""
+    },
+    "ntleas": {
+      "name": "Ntleas",
+      "enable": false,
+      "exec": ""
+    },
+    "noChanger": {
+      "name": "No Changer",
+      "enable": true,
+      "exec": "%GAME_PATH%"
+    }
+  },
+  "onlineApis": [
+    {
+      "enable": false,
+      "external": true,
+      "jsFile": "../../src/main/translateApi/CloudTencent.js",
+      "name": "腾讯云",
+      "apiType": "mecabTranslation"
+    },
+    {
+      "enable": true,
+      "external": true,
+      "jsFile": "../../src/main/translateApi/OpenBaidu.js",
+      "name": "百度翻译平台",
+      "apiType": "textTranslation"
+    },
+    {
+      "enable": true,
+      "external": true,
+      "jsFile": "../../src/main/translateApi/YouDaoApi.js",
+      "name": "有道云翻译平台",
+      "apiType": "mecabTranslation"
+    }
+  ],
+  "mecab": {
+    "enable": true,
+    "path": ""
+  },
+  "textTranslationApi": "百度翻译平台",
+  "mecabTranslationApi": "腾讯云"
+}

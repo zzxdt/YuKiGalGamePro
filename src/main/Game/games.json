@@ -1,0 +1,22 @@
+{
+  "games": [
+    {
+      "name": "SiglusEngine",
+      "path": "D:\\formalGames\\終のステラ\\SiglusEngine.exe",
+      "localeChanger": "localEmulator",
+      "code": ""
+    },
+    {
+      "name": "Nie No Hakoniwa",
+      "path": "D:\\formalGames\\Nie No Hakoniwa\\Nie No Hakoniwa.exe",
+      "localeChanger": "",
+      "code": ""
+    },
+    {
+      "name": "yukaku",
+      "path": "E:\\LSP\\boyu\\yukaku.exe",
+      "localeChanger": "localEmulator",
+      "code": ""
+    }
+  ]
+}
