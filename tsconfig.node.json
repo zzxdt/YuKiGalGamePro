@@ -4,7 +4,6 @@
     "module": "esnext",
     "jsx": "preserve",
     "moduleResolution": "node",
-    "composite": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
