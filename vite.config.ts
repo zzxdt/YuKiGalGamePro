@@ -94,12 +94,12 @@ export default defineConfig(({ mode }) => {
       sourcemap: isDevEnv,
       minify: !isDevEnv,
       outDir: resolve('./dist'),
-      // rollupOptions: {
-      //   input: {
-      //     main: './src/renderer/index.html', // 客户端可视界面的入口
-      //     translator: './src/translator/translator.html', // 翻译端界面的入口
-      //   }
-      // }
+      rollupOptions: {
+        input: {
+          main: 'index.html', // 客户端可视界面的入口
+          translator: '../translator/translator.html', // 翻译端界面的入口
+        }
+      }
     },
     plugins: [
       Vue(),
