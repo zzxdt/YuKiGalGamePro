@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { guiStore } from './gui';
-import { YkAboutPage } from '../components/layout';
-import { stat } from 'original-fs';
+import { guiStore } from './gui'
+import { YkAboutPage } from '../components/layout'
+import { stat } from 'original-fs'
 const configStore = defineStore('configState', {
   state: () => ({
     default: {} as yuki.ConfigState['default'],
@@ -12,14 +12,14 @@ const configStore = defineStore('configState', {
       path: '',
       localeChanger: '',
       code: ''
-    } as yuki.Game,
+    } as yuki.Game
   }),
   getters: {
     isGameInfoEmpty: (state) => {
-      return !state.game.name || !state.game.path;
+      return !state.game.name || !state.game.path
     },
     localeChangerArray(state) {
-      return Object.values(state.default.localeChangers);
+      return Object.values(state.default.localeChangers)
     },
     getGameName: (state) => {
       return state.game.name
@@ -65,20 +65,25 @@ const configStore = defineStore('configState', {
     setConfig(payload: { name: string; cfgs: any }) {
       switch (payload.name) {
         case 'default':
-          this.default = payload.cfgs;
-          break;
+          this.default = payload.cfgs
+          break
         case 'games':
           if (Array.isArray(payload.cfgs)) {
-            this.games = payload.cfgs;
+            this.games = payload.cfgs
             const useGuiStore = guiStore()
             this.games.length === 0 ? useGuiStore.setNoGame(true) : useGuiStore.setNoGame
           }
         case 'texts':
-          this.texts = payload.cfgs;
-          break;
+          this.texts = payload.cfgs
+          break
         default:
-          console.log('invalid config name: %s', JSON.stringify(payload.name), 'config is:', JSON.stringify(payload.cfgs));
-          break;
+          console.log(
+            'invalid config name: %s',
+            JSON.stringify(payload.name),
+            'config is:',
+            JSON.stringify(payload.cfgs)
+          )
+          break
       }
     },
     clearGames() {
@@ -86,13 +91,13 @@ const configStore = defineStore('configState', {
     },
     //管理各个api开关
     toggleApiEnable(index: number, isEnabled: boolean) {
-      const targetApi = this.default.onlineApis[index];
-      targetApi.enable = isEnabled;
-      targetApi.selectSwitchDisable = !isEnabled;
+      const targetApi = this.default.onlineApis[index]
+      targetApi.enable = isEnabled
+      targetApi.selectSwitchDisable = !isEnabled
       if (targetApi && isEnabled) {
         this.default.onlineApis.forEach((api, idx) => {
           if (api.apiType === targetApi.apiType && idx !== index) {
-            api.enable = false;
+            api.enable = false
             api.selectSwitchDisable = true
           }
         })
@@ -105,7 +110,7 @@ const configStore = defineStore('configState', {
       this.default.mecabTranslationApi = name
     },
     initializeSelectSwitches() {
-      this.default.onlineApis.forEach(api => {
+      this.default.onlineApis.forEach((api) => {
         api.selectSwitchDisable = !api.enable
       })
     },
@@ -114,8 +119,8 @@ const configStore = defineStore('configState', {
       window.mainApi.requestSaveConfig('default', JSON.stringify(mdefault))
     },
     setGamePath(path: string) {
-      this.game.path = path;
-      this.game.name = path.substring(path.lastIndexOf('\\') + 1, path.lastIndexOf('.exe'));
+      this.game.path = path
+      this.game.name = path.substring(path.lastIndexOf('\\') + 1, path.lastIndexOf('.exe'))
     },
     setGameCode(code: string) {
       this.game.code = code
@@ -128,23 +133,23 @@ const configStore = defineStore('configState', {
     },
     addLocaleChanger(newName: string, exec: string, enable: boolean) {
       if (!this.default.localeChangers.hasOwnProperty(newName)) {
-        this.default.localeChangers[newName] = { name: newName, enable, exec };
+        this.default.localeChangers[newName] = { name: newName, enable, exec }
       } else {
-        console.error("LocaleChanger with this name already exists!");
+        console.error('LocaleChanger with this name already exists!')
       }
     },
-    editLocaleChanger(name:string, newData:any) {
+    editLocaleChanger(name: string, newData: any) {
       if (this.default.localeChangers[name]) {
-        this.default.localeChangers[name] = { ...this.default.localeChangers[name], ...newData };
+        this.default.localeChangers[name] = { ...this.default.localeChangers[name], ...newData }
       }
     },
     deleteLocaleChanger(name: string) {
       if (this.default.localeChangers[name]) {
-        delete this.default.localeChangers[name];
+        delete this.default.localeChangers[name]
       }
     },
     resetGame() {
-      this.game = { name: '', path: '', code: '', localeChanger: '' };
+      this.game = { name: '', path: '', code: '', localeChanger: '' }
     }
   }
 })

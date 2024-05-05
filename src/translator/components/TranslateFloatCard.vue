@@ -1,6 +1,12 @@
 <template>
-  <div class="manageSpan" :data-key="datakey" :style="updataMecabPadding" @click="openDialog" :data-reading="reading"
-    @mouseenter="handleMouseEnter">
+  <div
+    class="manageSpan"
+    :data-key="datakey"
+    :style="updataMecabPadding"
+    @click="openDialog"
+    :data-reading="reading"
+    @mouseenter="handleMouseEnter"
+  >
     <span class="reading-item" :style="updataMecabReading">
       {{ reading }}
     </span>
@@ -10,15 +16,15 @@
   </div>
 </template>
 <script setup>
-import { defineProps, computed } from 'vue';
-import { TranslatorHookStore } from '../store/module/Hook';
-import { TranslatorConfigStore } from '../store/module/Config';
-import { throttle } from 'lodash';
+import { defineProps, computed } from 'vue'
+import { TranslatorHookStore } from '../store/module/Hook'
+import { TranslatorConfigStore } from '../store/module/Config'
+import { throttle } from 'lodash'
 const useTranslatorHookStore = TranslatorHookStore()
 const useTranslatorConfigStore = TranslatorConfigStore()
-const redisIsEnable = computed(() => useTranslatorConfigStore.getRedisIsEnable);
+const redisIsEnable = computed(() => useTranslatorConfigStore.getRedisIsEnable)
 // 检查redis中是否存在单词
-const checkRedisExist = computed(() => useTranslatorHookStore.getCheckRedisExist);
+const checkRedisExist = computed(() => useTranslatorHookStore.getCheckRedisExist)
 const props = defineProps({
   datakey: String,
   text: String,
@@ -29,16 +35,16 @@ const props = defineProps({
   baseform: String,
   kreading: String,
   reading: String
-});
+})
 const updataMecabText = computed(() => {
   const style = useTranslatorConfigStore.getMecabText
   if (style && style.fontSize) {
     return {
-      fontSize: `${style.fontSize}em`,
+      fontSize: `${style.fontSize}em`
     }
   } else {
     return {
-      fontSize: '1.5em',
+      fontSize: '1.5em'
     }
   }
 })
@@ -51,7 +57,7 @@ const updataMecabPadding = computed(() => {
     }
   } else {
     return {
-      fontPadding: "0.1em",
+      fontPadding: '0.1em',
       color: props.color
     }
   }
@@ -64,21 +70,21 @@ const updataMecabReading = computed(() => {
     }
   } else {
     return {
-      fontSize: "0.6em"
+      fontSize: '0.6em'
     }
   }
 })
 const handleMouseEnter = throttle(async () => {
-  const word = props.word;
-  const wordKey = props.datakey;
+  const word = props.word
+  const wordKey = props.datakey
   const reading = props.reading || props.kreading
   const romaji = props.romaji
-  const saveInAnki = "0"
+  const saveInAnki = '0'
   await useTranslatorHookStore.checkWordInAnki(word)
   // 检查redis是否代开，如果打开了，就先检查否则直接翻译
   if (redisIsEnable.value) {
     await useTranslatorHookStore.checkWordInRedis(wordKey)
-    const exist = checkRedisExist.value;
+    const exist = checkRedisExist.value
     if (!exist) {
       //不存在翻译，存在redis读取结果
       await useTranslatorHookStore.translateMecabText(wordKey, word, reading, romaji, saveInAnki)
@@ -86,11 +92,25 @@ const handleMouseEnter = throttle(async () => {
       await useTranslatorHookStore.getRedisMecabInfo(wordKey)
     }
   } else {
-    await useTranslatorHookStore.translateMecabText(wordKey, word, word, reading, romaji, saveInAnki)
+    await useTranslatorHookStore.translateMecabText(
+      wordKey,
+      word,
+      word,
+      reading,
+      romaji,
+      saveInAnki
+    )
   }
 }, 1500)
 const openDialog = () => {
-  useTranslatorHookStore.handleMecabTranslationTextInfo(props.word, props.romaji, props.pos, props.baseform, props.kreading, props.reading)
+  useTranslatorHookStore.handleMecabTranslationTextInfo(
+    props.word,
+    props.romaji,
+    props.pos,
+    props.baseform,
+    props.kreading,
+    props.reading
+  )
   useTranslatorHookStore.setDialog(true)
 }
 </script>

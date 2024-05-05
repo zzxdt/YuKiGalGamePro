@@ -16,9 +16,16 @@
             <v-col>
               <v-row>
                 <v-col sm="12" md="8" lg="6" align="center" align-self="center">
-                  <v-text-field readonly dense persistent-hint counter variant="underlined"
-                    :hint="$t('TranslatorTextInfo.lastText')" :placeholder="$t('TranslatorTextInfo.waitForTexts')"
-                    v-model="hook.text" />
+                  <v-text-field
+                    readonly
+                    dense
+                    persistent-hint
+                    counter
+                    variant="underlined"
+                    :hint="$t('TranslatorTextInfo.lastText')"
+                    :placeholder="$t('TranslatorTextInfo.waitForTexts')"
+                    v-model="hook.text"
+                  />
                 </v-col>
                 <v-col sm="12" md="4" lg="2" align="center" align-self="center">
                   <v-btn rounded color="success" dark to="/translate" @click="chooseAsDisplay">
@@ -35,14 +42,14 @@
   </div>
 </template>
 <script setup>
-import { TranslatorHookStore } from '../store/module/Hook';
+import { TranslatorHookStore } from '../store/module/Hook'
 const useTranslatorHookStore = TranslatorHookStore()
 import { defineProps } from 'vue'
 const hookinfo = defineProps({
   hook: Object
 })
 const chooseAsDisplay = () => {
-  const choseHandle = hookinfo.hook?.handle;
+  const choseHandle = hookinfo.hook?.handle
   // 将选中handle传递给 store
   useTranslatorHookStore.setCurrentHandle(choseHandle)
 }

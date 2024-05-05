@@ -5,10 +5,10 @@
 </template>
 
 <script setup>
-import { TranslateHome } from './components';
-import { TranslatorConfigStore } from './store/module/Config';
-import { onMounted, computed, onBeforeUnmount } from 'vue';
-import { configIpcService } from './translatorIpcServer/configIpcService';
+import { TranslateHome } from './components'
+import { TranslatorConfigStore } from './store/module/Config'
+import { onMounted, computed, onBeforeUnmount } from 'vue'
+import { configIpcService } from './translatorIpcServer/configIpcService'
 const useTranslatorConfigStore = TranslatorConfigStore()
 const updataBackGroundColor = computed(() => {
   const style = useTranslatorConfigStore.getbackgroundColor
@@ -23,8 +23,8 @@ const updataBackGroundColor = computed(() => {
   }
 })
 onMounted(() => {
-  configIpcService.init();
-});
+  configIpcService.init()
+})
 onBeforeUnmount(() => {
   configIpcService.unregisterEventListeners()
 })

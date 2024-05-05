@@ -10,9 +10,9 @@ export default class ApplicationBuilder<T> {
     await this.iterator(initContext, 0)
   }
   // iterator method
-  private async iterator(context: T, index: number):Promise<void>{
+  private async iterator(context: T, index: number): Promise<void> {
     if (index === this.middlewares.length) return
-    await this.middlewares[index].process(context, async(newContext) => {
+    await this.middlewares[index].process(context, async (newContext) => {
       await this.iterator(newContext, index + 1)
     })
   }

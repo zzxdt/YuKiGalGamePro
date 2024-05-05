@@ -5,8 +5,15 @@
       <router-view></router-view>
     </v-main>
     <v-container @mouseenter="showNav" @mouseleave="hideNav">
-      <v-bottom-navigation grow height="25"
-        :class="{ 'animate__animated': true, 'animate__fadeIn': showNavigation, 'animate__fadeOut': !showNavigation }">
+      <v-bottom-navigation
+        grow
+        height="25"
+        :class="{
+          animate__animated: true,
+          animate__fadeIn: showNavigation,
+          animate__fadeOut: !showNavigation
+        }"
+      >
         <v-btn small text dark to="/translate">
           <!-- <v-icon>mdi-translate</v-icon> -->
           <span>{{ $t('mainSilderBar.translate') }}</span>
@@ -24,32 +31,36 @@
   </div>
 </template>
 <script setup>
-import { TranslatorTitleBar } from '.';
+import { TranslatorTitleBar } from '.'
 import { debounce } from 'lodash'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 import { ref, computed, watch } from 'vue'
-import { TranslatorConfigStore } from '../store/module/Config';
+import { TranslatorConfigStore } from '../store/module/Config'
 const useTranslatorConfigStore = TranslatorConfigStore()
-const showNavigation = ref(false);
+const showNavigation = ref(false)
 const bounds = computed(() => useTranslatorConfigStore.getbounds)
 const windowsSize = computed(() => useTranslatorConfigStore.getSize)
 const router = useRouter()
 const resizeWindow = (width, height) => {
   if (width && height) {
-    window.mainApi.resizeWindow(width, height);
+    window.mainApi.resizeWindow(width, height)
   } else {
-    console.error('Invalid dimensions provided for window resize:', width, height);
+    console.error('Invalid dimensions provided for window resize:', width, height)
   }
-};
-watch(() => bounds, (newBounds) => {
-  if (newBounds) {
-    const currentPath = router.currentRoute.value.path;
-    useTranslatorConfigStore.updateRouteSize(currentPath);
+}
+watch(
+  () => bounds,
+  (newBounds) => {
+    if (newBounds) {
+      const currentPath = router.currentRoute.value.path
+      useTranslatorConfigStore.updateRouteSize(currentPath)
+    }
+  },
+  {
+    immediate: true,
+    deep: true
   }
-}, {
-  immediate: true,
-  deep: true
-});
+)
 // 显示导航栏
 const showNav = () => {
   showNavigation.value = true
@@ -59,26 +70,26 @@ const hideNav = debounce(() => {
   showNavigation.value = false
 }, 5000)
 
-let adjustingSize = false;
+let adjustingSize = false
 router.beforeEach((to, from, next) => {
-  adjustingSize = true;
-  next();
-});
+  adjustingSize = true
+  next()
+})
 router.afterEach((to, from) => {
-  const newPathBounds = windowsSize.value[to.path];
+  const newPathBounds = windowsSize.value[to.path]
   if (newPathBounds) {
-    const { width, height } = bounds.value;
+    const { width, height } = bounds.value
     if (width !== newPathBounds.width || height !== newPathBounds.height) {
-      resizeWindow(newPathBounds.width, newPathBounds.height);
+      resizeWindow(newPathBounds.width, newPathBounds.height)
     }
     setTimeout(() => {
       if (adjustingSize) {
-        useTranslatorConfigStore.updateRouteSize(to.path);
-        adjustingSize = false;
+        useTranslatorConfigStore.updateRouteSize(to.path)
+        adjustingSize = false
       }
-    }, 300);
+    }, 300)
   }
-});
+})
 </script>
 <style scoped>
 .router-view-transparent {

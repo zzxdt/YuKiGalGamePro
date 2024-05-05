@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { YkPageHeader, YkPageContent } from '.';
+import { YkPageHeader, YkPageContent } from '.'
 </script>
 
 <style scoped></style>

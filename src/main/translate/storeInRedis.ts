@@ -2,9 +2,9 @@
 import Redis from 'ioredis'
 import { logger } from '../Log/LogCollector'
 interface WordInfo {
-  result: string;
-  mp3Url: string;
-  reading: string;
+  result: string
+  mp3Url: string
+  reading: string
   romaji: string
 }
 export default class StoreInRedis {
@@ -17,30 +17,51 @@ export default class StoreInRedis {
   }
   constructor() {
     this.redis = new Redis({
-      host: "localhost",
-      port: 6379,
+      host: 'localhost',
+      port: 6379
     })
     this.redis.on('connect', () => {
-      console.log('Connected to Redis');
-      this.updateFrontend(true);
-    });
+      console.log('Connected to Redis')
+      this.updateFrontend(true)
+    })
 
     this.redis.on('error', (error) => {
-      console.error('Redis error:', error);
-      this.updateFrontend(false);
-    });
+      console.error('Redis error:', error)
+      this.updateFrontend(false)
+    })
 
     this.redis.on('close', () => {
-      console.log('Redis connection closed');
-      this.updateFrontend(false);
-    });
+      console.log('Redis connection closed')
+      this.updateFrontend(false)
+    })
   }
   private static instance: StoreInRedis | undefined
-  public async storeWordInfo(wordKey: string, text: string, translation: string, audioUrl: string, reading: string, romaji: string, saveInAnki: string): Promise<void> {
+  public async storeWordInfo(
+    wordKey: string,
+    text: string,
+    translation: string,
+    audioUrl: string,
+    reading: string,
+    romaji: string,
+    saveInAnki: string
+  ): Promise<void> {
     try {
-      await this.redis.hset(wordKey, 'orininalText', text, 'translation', translation, 'audioUrl', audioUrl,
-        'reading', reading, 'romaji', romaji, 'saveInAnki', saveInAnki)
-      logger.debug('The message has been store!%s', wordKey);
+      await this.redis.hset(
+        wordKey,
+        'orininalText',
+        text,
+        'translation',
+        translation,
+        'audioUrl',
+        audioUrl,
+        'reading',
+        reading,
+        'romaji',
+        romaji,
+        'saveInAnki',
+        saveInAnki
+      )
+      logger.debug('The message has been store!%s', wordKey)
     } catch (error) {
       logger.debug('store in redis meet error!%s', error)
       logger.debug('fail to store in redis!')
@@ -48,12 +69,12 @@ export default class StoreInRedis {
   }
   //检测redis是否连接
   private updateFrontend(connected: boolean) {
-    console.log('Updating frontend, Redis connected:', connected);
+    console.log('Updating frontend, Redis connected:', connected)
     window.mainApi.checkRedisStatus(connected)
   }
   // 获取单词信息
   public async getWordInfo(wordKey: string): Promise<WordInfo | null> {
-    logger.debug("rearching wordKey:", wordKey);
+    logger.debug('rearching wordKey:', wordKey)
     const result = await this.redis.hgetall(wordKey)
     if (result.translation && result.audioUrl) {
       logger.debug('translation is', result.translation)
@@ -64,11 +85,10 @@ export default class StoreInRedis {
         reading: result.reading,
         romaji: result.romaji
       }
-    }
-    else {
-      logger.debug('cant find wordKey:', wordKey);
+    } else {
+      logger.debug('cant find wordKey:', wordKey)
       logger.debug('cant find message in redis!')
-      throw new Error('cant find wordKey' + wordKey);
+      throw new Error('cant find wordKey' + wordKey)
     }
   }
   // 删除单词信息
@@ -76,14 +96,13 @@ export default class StoreInRedis {
     try {
       const result = await this.redis.del(wordKey)
       if (result === 1) {
-        logger.debug('success delete message!', wordKey);
+        logger.debug('success delete message!', wordKey)
         return { success: true }
       } else {
-        logger.debug('the message not exist!', wordKey);
+        logger.debug('the message not exist!', wordKey)
         return { success: false, error: 'Message in redis not exist!' }
       }
-    }
-    catch (error: any) {
+    } catch (error: any) {
       logger.debug('delete message fialure', error.message)
       return { success: false, error: error.message }
     }
@@ -140,7 +159,7 @@ export default class StoreInRedis {
   public async checkAllKeys(): Promise<string[]> {
     try {
       const result = await this.redis.keys('*')
-      logger.debug(`all keys: ${result}`);
+      logger.debug(`all keys: ${result}`)
       return result
     } catch (error) {
       logger.debug('check the wordkey error')
@@ -153,22 +172,22 @@ export default class StoreInRedis {
       const stream = this.redis.scanStream({
         match: '*',
         count: 100
-      });
-      const keys: string[] = [];
+      })
+      const keys: string[] = []
       for await (const key of stream) {
-        keys.push(...key);
+        keys.push(...key)
       }
-      const results: { key: string; value: Record<string, string> }[] = [];
+      const results: { key: string; value: Record<string, string> }[] = []
       for (const key of keys) {
-        const value = await this.redis.hgetall(key);
-        results.push({ key, value });
+        const value = await this.redis.hgetall(key)
+        results.push({ key, value })
       }
-      logger.debug(`all message: ${JSON.stringify(results)}`);
-      return results;
+      logger.debug(`all message: ${JSON.stringify(results)}`)
+      return results
     } catch (error) {
-      console.error(error);
+      console.error(error)
       logger.debug('check the all message error')
-      throw new Error('检查所有信息失败!');
+      throw new Error('检查所有信息失败!')
     }
   }
   // 退出连接

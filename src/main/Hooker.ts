@@ -1,6 +1,6 @@
 import IpcTypes from '../common/IpcTypes'
 import { logger } from './Log/LogCollector'
-import * as path from 'path'
+import { resolve } from 'path'
 import { Textractor } from 'textractor-wrapper'
 import ApplicationBuilder from '../common/ApplicationBuilder'
 import ConfigManager from './config/ConfigManager'
@@ -10,7 +10,7 @@ import PublishMiddleware from './middlewares/PublishMiddleware'
 import TextInterceptorMiddleware from './middlewares/TextInterceptorMiddleware'
 import TextMergerMiddleware from './middlewares/TextMergerMiddleware'
 import TextModifierMiddleware from './middlewares/TextModifierMiddleware'
-
+import Constants from './utils/Constants'
 let applicationBuilder: ApplicationBuilder<yuki.TextOutputObject>
 
 interface IPublisherMap {
@@ -34,7 +34,9 @@ export default class Hooker {
 
   private constructor() {
     // TextractorCLI路径
-    const absolutePath = path.resolve(__dirname, '../../lib/textractor/TextractorCLI.exe')
+    const absolutePath = Constants.IS_DEV_ENV
+      ? resolve(__dirname, '../../lib/textractor/TextractorCLI.exe')
+      : resolve(__dirname, '../../../lib/textractor/TextractorCLI.exe')
     logger.debug('trying to access CLI exe at %s', absolutePath)
     this.hooker = new Textractor(absolutePath)
     this.buildApplication()
@@ -101,9 +103,8 @@ export default class Hooker {
       this.hooker.on('output', async (output) => {
         await applicationBuilder.run(output)
       })
-    }
-    catch (e) {
-      logger.error("Textractor has issue!", e)
+    } catch (e) {
+      logger.error('Textractor has issue!', e)
     }
   }
 }

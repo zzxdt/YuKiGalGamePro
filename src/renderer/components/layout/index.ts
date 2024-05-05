@@ -26,5 +26,5 @@ export {
   YkGamePageGameCard,
   AddGamePageVue,
   MyGameList,
-  TextScreen,
+  TextScreen
 }

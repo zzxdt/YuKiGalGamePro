@@ -1,6 +1,6 @@
 import { contextBridge, ipcMain, ipcRenderer, IpcRendererEvent } from 'electron'
 import IpcTypes from '@/common/IpcTypes'
-import * as cheerio from 'cheerio';
+import * as cheerio from 'cheerio'
 // Whitelist of valid channels used for IPC communication (Send message from Renderer to Main)
 const mainAvailChannels: string[] = [
   'msgRequestGetVersion',
@@ -68,12 +68,12 @@ const rendererAvailChannels: string[] = [
   `${IpcTypes.HAS_PATH_WITH_FILE}`
 ]
 function parseHTML(htmlString: string) {
-  const $ = cheerio.load(htmlString);
-  let extractedText = '';
+  const $ = cheerio.load(htmlString)
+  let extractedText = ''
   $('span').each((index, element) => {
-    extractedText += $(element).text();
-  });
-  return extractedText.trim();
+    extractedText += $(element).text()
+  })
+  return extractedText.trim()
 }
 contextBridge.exposeInMainWorld('mainApi', {
   // 处理mecab 分词的span标签
@@ -122,7 +122,7 @@ contextBridge.exposeInMainWorld('mainApi', {
   },
   receive: (channel: string, listener) => {
     if (rendererAvailChannels.includes(channel)) {
-      ipcRenderer.on(channel, (event, ...args) => listener(...args));
+      ipcRenderer.on(channel, (event, ...args) => listener(...args))
     } else {
       throw new Error(`Unknown ipc channel name: ${channel}`)
     }
@@ -133,9 +133,11 @@ contextBridge.exposeInMainWorld('mainApi', {
   closeApp: () => ipcRenderer.send(IpcTypes.CLOSE_APP),
   restartApp: () => ipcRenderer.send(IpcTypes.RESTART_APP),
   requestProcess: () => ipcRenderer.send(IpcTypes.REQUEST_PROCESSES),
-  requestRunGame: (game?: yuki.Game, stratFromProcess?: yuki.Process) => ipcRenderer.send(IpcTypes.REQUEST_RUN_GAME, game, stratFromProcess),
+  requestRunGame: (game?: yuki.Game, stratFromProcess?: yuki.Process) =>
+    ipcRenderer.send(IpcTypes.REQUEST_RUN_GAME, game, stratFromProcess),
   requestRemoveGame: (games: yuki.Game) => ipcRenderer.send(IpcTypes.REQUEST_REMOVE_GAME, games),
-  requestSaveConfig: (name: string, savingConfig: any) => ipcRenderer.send(IpcTypes.REQUEST_SAVE_CONFIG, name, savingConfig),
+  requestSaveConfig: (name: string, savingConfig: any) =>
+    ipcRenderer.send(IpcTypes.REQUEST_SAVE_CONFIG, name, savingConfig),
   openFolder: (path: string) => ipcRenderer.send(IpcTypes.OPEN_FLODER, path),
   requestNewGamePath: () => ipcRenderer.send(IpcTypes.REQUEST_NEW_GAME_PATH),
   requestAddGame: (game: yuki.Game) => ipcRenderer.send(IpcTypes.REQUEST_ADD_GAME, game),
@@ -146,11 +148,28 @@ contextBridge.exposeInMainWorld('mainApi', {
   appExit: () => ipcRenderer.send(IpcTypes.APP_EXIT),
   requestTranslations: () => ipcRenderer.send(IpcTypes.REQUEST_TRANSLATION),
   requestDict: () => ipcRenderer.send(IpcTypes.REQUEST_DICT),
-  loadGameAtStart: (configName: string) => ipcRenderer.send(IpcTypes.LOAD_GAME_AT_START, configName),
+  loadGameAtStart: (configName: string) =>
+    ipcRenderer.send(IpcTypes.LOAD_GAME_AT_START, configName),
   toggleDevTools: () => ipcRenderer.send(IpcTypes.TOOGLE_DEV_TOOLS),
-  requestSaveTranslatorGui: (currentWindow: object) => ipcRenderer.send(IpcTypes.REQUEST_SAVE_TRANSLATOR_GUI, currentWindow),
-  translateOrignalText: (origonalText: string) => ipcRenderer.send(IpcTypes.TRANSLATE_ORIGINAL_TEXT, origonalText),
-  translateMecabText: (dataKey: string, mecabText: string, reading: string, romaji: string, saveInAnki: string) => ipcRenderer.send(IpcTypes.TRANSLATE_MECAB_TEXT, dataKey, mecabText, reading, romaji, saveInAnki),
+  requestSaveTranslatorGui: (currentWindow: object) =>
+    ipcRenderer.send(IpcTypes.REQUEST_SAVE_TRANSLATOR_GUI, currentWindow),
+  translateOrignalText: (origonalText: string) =>
+    ipcRenderer.send(IpcTypes.TRANSLATE_ORIGINAL_TEXT, origonalText),
+  translateMecabText: (
+    dataKey: string,
+    mecabText: string,
+    reading: string,
+    romaji: string,
+    saveInAnki: string
+  ) =>
+    ipcRenderer.send(
+      IpcTypes.TRANSLATE_MECAB_TEXT,
+      dataKey,
+      mecabText,
+      reading,
+      romaji,
+      saveInAnki
+    ),
   toggleAlwaysOnTop: () => {
     ipcRenderer.send(IpcTypes.TOGGLE_ALWAYS_ON_TOP)
   },
@@ -189,9 +208,13 @@ contextBridge.exposeInMainWorld('mainApi', {
   // 自定义发送至子进程方法区
   // callback 返回函数，接收到数据进行处理
   hasConfig: (callback: (name: string, cfgs: object) => void) => {
-    ipcRenderer.on(IpcTypes.HAS_CONFIG, (event: IpcRendererEvent, name, cfgs) => callback(name, cfgs))
+    ipcRenderer.on(IpcTypes.HAS_CONFIG, (event: IpcRendererEvent, name, cfgs) =>
+      callback(name, cfgs)
+    )
   },
   hasHookText: (callback: any) => {
-    ipcRenderer.on(IpcTypes.HAS_HOOK_TEXT, (event: IpcRendererEvent, textInPutContext) => callback(textInPutContext))
-  },
+    ipcRenderer.on(IpcTypes.HAS_HOOK_TEXT, (event: IpcRendererEvent, textInPutContext) =>
+      callback(textInPutContext)
+    )
+  }
 })

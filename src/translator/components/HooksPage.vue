@@ -3,9 +3,7 @@
 </template>
 
 <script setup>
-import { TranslatorHookSetting } from '.';
+import { TranslatorHookSetting } from '.'
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

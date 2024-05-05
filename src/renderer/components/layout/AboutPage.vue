@@ -15,15 +15,13 @@
           <v-col cols="4">
             <div class="switch-container">
               <v-switch v-model="ankiSwitch" inset color="info"></v-switch>
-              <p class="label">Anki {{ ankiSwitch ? '已开启' : '已关闭' }}
-              </p>
+              <p class="label">Anki {{ ankiSwitch ? '已开启' : '已关闭' }} </p>
             </div>
           </v-col>
           <v-col>
             <div class="switch-container">
               <v-switch v-model="mecabSwitch" inset color="info"></v-switch>
-              <p class="label">Mecab {{ mecabSwitch ? '已开启' : '已关闭' }}
-              </p>
+              <p class="label">Mecab {{ mecabSwitch ? '已开启' : '已关闭' }} </p>
             </div>
           </v-col>
         </v-row>
@@ -34,8 +32,8 @@
 </template>
 <script setup lang="ts">
 import { YkPageHeader, YkPageContent } from '.'
-import { computed } from 'vue';
-import { configStore } from '@/renderer/store/config';
+import { computed } from 'vue'
+import { configStore } from '@/renderer/store/config'
 const useConfigStore = configStore()
 const redisSwitch = computed({
   get: () => useConfigStore.default.redis,
@@ -73,11 +71,11 @@ const openDevTools = () => {
 }
 
 .AboutPage {
-  height: 100%
+  height: 100%;
 }
 
 .label {
-  margin-top: 0
+  margin-top: 0;
 }
 
 .aboutn {

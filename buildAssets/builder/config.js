@@ -1,13 +1,31 @@
 /* eslint-disable no-template-curly-in-string */
 const dotenv = require('dotenv')
-
+const path = require('path')
 const baseConfig = {
-  productName: 'Vutron',
-  appId: 'com.vutron.vutron',
+  productName: 'YuKiGalGamePro',
+  appId: 'com.yuki.translator',
   asar: true,
+  asarUnpack: ['combined.log', 'errors.log'],
   extends: null,
   compression: 'maximum',
   artifactName: '${productName} ${version}_${arch}.${ext}',
+  extraResources: [
+    {
+      from: path.resolve(__dirname, '../../src/main/translateApi'),
+      to: 'translateApi',
+      filter: ['**/*']
+    },
+    {
+      from: path.resolve(__dirname, '../../config'),
+      to: 'config',
+      filter: ['**/*']
+    },
+    {
+      from: path.resolve(__dirname, '../../lib'),
+      to: 'lib',
+      filter: ['**/*']
+    }
+  ],
   directories: {
     output: './release/${version}'
   },
@@ -16,7 +34,7 @@ const baseConfig = {
     hardenedRuntime: true,
     gatekeeperAssess: false,
     notarize: false,
-    icon: 'buildAssets/icons/icon.icns',
+    icon: 'buildAssets/icons/yuki.ico',
     type: 'distribution',
     target: [
       {
@@ -42,7 +60,7 @@ const baseConfig = {
     sign: false
   },
   win: {
-    icon: 'buildAssets/icons/icon.ico',
+    icon: 'buildAssets/icons/yuki.ico',
     target: [
       {
         target: 'appx',

@@ -4,10 +4,8 @@
   </v-app>
 </template>
 <script setup lang="tsx">
-import {
-  AppSilderBarVue,
-} from '@/renderer/components/layout'
-import { onMounted, onBeforeUnmount } from 'vue';
+import { AppSilderBarVue } from '@/renderer/components/layout'
+import { onMounted, onBeforeUnmount } from 'vue'
 import { configIpcService } from '@/ipcServer/configIpcService'
 onMounted(() => {
   // 处理pinia中的store 通过ipc获取到的数据存放到pinia中 存放在/src/ipcServer中

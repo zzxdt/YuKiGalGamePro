@@ -9,8 +9,8 @@ export default class MecabMiddleWare implements yuki.Middleware<yuki.TextOutputO
     数詞: 'num', // number
     代名詞: 'pn', // pronoun
     動詞: 'v', // verb
-    形状詞: 'a', // 
-    連体詞: 'adn', // adnominal, 
+    形状詞: 'a', //
+    連体詞: 'adn', // adnominal,
     形容詞: 'adj', // adjective
     副詞: 'adv', // adverb
     助詞: 'p', // 動詞 = particle
@@ -47,18 +47,20 @@ export default class MecabMiddleWare implements yuki.Middleware<yuki.TextOutputO
 
   constructor(config: yuki.Config.Libraries['mecab']) {
     if (!config) {
-        debug('MeCab middleware is disabled due to config');
-      return;
+      debug('MeCab middleware is disabled due to config')
+      return
     }
     try {
       this.mecab = new Mecab()
-        debug('MeCab middleware enabled');
-    }
-    catch (error) {
-        debug('Failed to initialize MeCab:', error);
+      debug('MeCab middleware enabled')
+    } catch (error) {
+      debug('Failed to initialize MeCab:', error)
     }
   }
-  public async process(context: yuki.TextOutputObject, next: (newContext: yuki.TextOutputObject) => Promise<void>) {
+  public async process(
+    context: yuki.TextOutputObject,
+    next: (newContext: yuki.TextOutputObject) => Promise<void>
+  ) {
     if (!this.mecab) {
       await next(context)
       return
@@ -69,17 +71,17 @@ export default class MecabMiddleWare implements yuki.Middleware<yuki.TextOutputO
       // 去掉最后的 数组
       textResults.pop()
       // 经过mecab处理的文本
-      const formattedText = this.formatResults(textResults);
+      const formattedText = this.formatResults(textResults)
       // 格式化的文本 分词结构
       context.formattedText = formattedText
-        debug('get success mecab text:', formattedText)
-      await next(context);
+      debug('get success mecab text:', formattedText)
+      await next(context)
     } catch (error) {
-        debug('Failed to parse text:', error)
+      debug('Failed to parse text:', error)
     }
   }
   private parseTextSync(text: string): string[][] {
-      debug('mecab parseSync method has been use!')
+    debug('mecab parseSync method has been use!')
     return this.mecab.parseSync(text)
   }
   // 异步方法，确实很快性能高一些，但是文本相比较于同步方法还是会略过很多
@@ -96,26 +98,28 @@ export default class MecabMiddleWare implements yuki.Middleware<yuki.TextOutputO
     })
   }
   private formatResults(formateTexts: string[][]) {
-      debug('start to formate mecab result!')
-      debug('formate mecab original result is:', formateTexts)
-    const japanesePunctuation = ". 、, [] 〜 、！？「」『』【】〝〟〰〽ゝゞ・*";
-    return formateTexts.map((result, index) => {
-      const word = result[0] === '*' ? '' : result[0];; //原型
-      const pos = result[1] === '*' ? '' : result[1]; // 词性
-      const katakanareading = result[result.length - 1]; //片假名读音
-      const romaji = toRomaji(result[result.length - 1]); //罗马字
-      const baseForm = result[3] === '*' ? result[0] : result[3];
-      let reading = ''
-      const key = `word_${word}`; //查询redis的key
-      const textColor = MecabMiddleWare.ABBR_TO_COLOR_MAP[MecabMiddleWare.KANJI_TO_ABBR_MAP[pos]] // 词性对应的颜色
-      // 检查是否为汉字或片假名，并且不是日语标点
-      if (isKanji(word) && !japanesePunctuation.includes(word)) {
-        reading = toHiragana(result[result.length - 1] || '');
-      }
-      return `<span  style="color:${textColor}"  
+    debug('start to formate mecab result!')
+    debug('formate mecab original result is:', formateTexts)
+    const japanesePunctuation = '. 、, [] 〜 、！？「」『』【】〝〟〰〽ゝゞ・*'
+    return formateTexts
+      .map((result, index) => {
+        const word = result[0] === '*' ? '' : result[0] //原型
+        const pos = result[1] === '*' ? '' : result[1] // 词性
+        const katakanareading = result[result.length - 1] //片假名读音
+        const romaji = toRomaji(result[result.length - 1]) //罗马字
+        const baseForm = result[3] === '*' ? result[0] : result[3]
+        let reading = ''
+        const key = `word_${word}` //查询redis的key
+        const textColor = MecabMiddleWare.ABBR_TO_COLOR_MAP[MecabMiddleWare.KANJI_TO_ABBR_MAP[pos]] // 词性对应的颜色
+        // 检查是否为汉字或片假名，并且不是日语标点
+        if (isKanji(word) && !japanesePunctuation.includes(word)) {
+          reading = toHiragana(result[result.length - 1] || '')
+        }
+        return `<span  style="color:${textColor}"  
         word="${word}" datakey="${key}" romaji="${romaji}" pos="${pos}" baseform="${baseForm}" kreading="${katakanareading}" reading="${reading}"
       >${word}
-      </span>`;
-    }).join('')
+      </span>`
+      })
+      .join('')
   }
 }

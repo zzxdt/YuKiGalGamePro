@@ -13,7 +13,7 @@ export default class DefaultConfig extends Config {
         {
           enable: false,
           external: true,
-          jsFile: '../../src/main/translateApi/CloudTencent.js',
+          jsFile: '../../../translateApi/CloudTencent.js',
           name: '腾讯云',
           apiType: 'mecabTranslation',
           selectSwitchDisable: false
@@ -21,7 +21,7 @@ export default class DefaultConfig extends Config {
         {
           enable: true,
           external: true,
-          jsFile: '../../src/main/translateApi/OpenBaidu.js',
+          jsFile: '../../../translateApi/OpenBaidu.js',
           name: '百度翻译平台',
           apiType: 'textTranslation',
           selectSwitchDisable: false
@@ -29,21 +29,25 @@ export default class DefaultConfig extends Config {
         {
           enable: true,
           external: true,
-          jsFile: '../../src/main/translateApi/YouDaoApi.js',
-          name: "有道云翻译平台",
+          jsFile: '../../../translateApi/YouDaoApi.js',
+          name: '有道云翻译平台',
           apiType: 'mecabTranslation',
           selectSwitchDisable: false
         }
       ],
       localeChangers: {
-        localEmulator: { name: 'LocalEmulator', enable: false, exec: 'E:\\localEnum\\LEProc.exe' },
-        noChanger: { name: 'No Changer', enable: true, exec: '%GAME_PATH%' }
+        localEmulator: {
+          name: 'LocalEmulator',
+          enable: true,
+          exec: ''
+        },
+        noChanger: { name: 'No Changer', enable: false, exec: '%GAME_PATH%' }
       },
       mecab: true,
       redis: true,
       anki: true,
       textTranslationApi: '百度翻译平台',
-      mecabTranslationApi: '有道云翻译平台',
+      mecabTranslationApi: '有道云翻译平台'
     }
   }
 }

@@ -14,10 +14,10 @@ const myOptimizedBrightDayTheme = {
     'surface-variant': '#E0E0E0', // 表面变体，用于区分不同的UI元素
     'on-surface-variant': '#333333', // 深色文字，确保足够的对比度
     primaryShowCard: '#E1F5FE',
-    toolbar: "#E1F5FE",
-    snackBar: "#AED581",
-    sameSncakBar: "#FDD835",
-    debugBar: "#90A4AE",
+    toolbar: '#E1F5FE',
+    snackBar: '#AED581',
+    sameSncakBar: '#FDD835',
+    debugBar: '#90A4AE',
     primary: '#007BFF', // 鲜艳的蓝色，用于按钮、链接等主要元素
     'primary-darken-1': '#0056b3', // 主色的深色变体，用于按下效果等
     secondary: '#E91E63', // 明亮的粉色，增加活力
@@ -33,8 +33,8 @@ const myOptimizedBrightDayTheme = {
     mecabCardTitle: '#7C4DFF',
     mecabOther: '#424242',
     snackerBar: '#F06292',
-    divider: "#E0E0E0",
-    table: "#B0BEC5"
+    divider: '#E0E0E0',
+    table: '#B0BEC5'
   },
   variables: {
     'border-color': '#E0E0E0', // 边框颜色，与表面变体相匹配
@@ -53,8 +53,7 @@ const myOptimizedBrightDayTheme = {
     'theme-on-kbd': '#333333', // 键盘上的文字颜色
     'theme-code': '#FFF8E1', // 代码块的背景色
     'theme-on-code': '#333333', // 代码块上的文字颜色
-    'warning-light-1': '#FF8A80', // 警告色的深色变体，用于交互效果
-
+    'warning-light-1': '#FF8A80' // 警告色的深色变体，用于交互效果
   }
 }
 // 暗黑主题
@@ -68,9 +67,9 @@ const myOptimizedDarkTheme = {
     'surface-variant': '#373737', // 表面变体，增加视觉深度
     'on-surface-variant': '#E0E0E0', // 对比色，用于在深色表面上的文本或图标
     primaryShowCard: '#81C784', //浅绿色
-    toolbar: "#E8F5E9",
-    snackBar: "#C8E6C9",
-    sameSncakBar: "#FFCC80",
+    toolbar: '#E8F5E9',
+    snackBar: '#C8E6C9',
+    sameSncakBar: '#FFCC80',
     debugBar: '#FFB300',
     primary: '#B89B72', // 暗金色，提供活力和焦点
     'primary-darken-1': '#9e00c5', // 主色深色变体，用于交互效果
@@ -87,8 +86,8 @@ const myOptimizedDarkTheme = {
     mecabCardTitle: '#2E7D32',
     mecabOther: '#424242',
     snackerBar: '#BA68C8',
-    divider: "#FFF3E0",
-    table: "#FFEA00"
+    divider: '#FFF3E0',
+    table: '#FFEA00'
   },
   variables: {
     'border-color': '#292929', // 边框色，确保足够的辨识度
@@ -106,7 +105,7 @@ const myOptimizedDarkTheme = {
     'theme-kbd': '#616161', // 键盘快捷键背景色，深灰色
     'theme-on-kbd': '#FFFFFF', // 键盘上的文字颜色，白色
     'theme-code': '#1E1E1E', // 代码块的背景色，与表面色相近
-    'theme-on-code': '#B3E5FC', // 代码块上的文字颜色，淡蓝色
+    'theme-on-code': '#B3E5FC' // 代码块上的文字颜色，淡蓝色
   }
 }
 export default createVuetify({

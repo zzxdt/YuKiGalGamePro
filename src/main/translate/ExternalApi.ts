@@ -1,8 +1,9 @@
-import crypto from 'crypto';
+import crypto from 'crypto'
 import fs from 'fs'
-import path from 'path'
+import { resolve } from 'path'
 import axios from 'axios'
 import vm from 'vm'
+import Constants from '../utils/Constants'
 const debug = require('debug')('yuki:api')
 export default class ExternalApi implements yuki.Translator {
   private config: yuki.Config.OnlineApiItem
@@ -40,14 +41,16 @@ export default class ExternalApi implements yuki.Translator {
     return this.config
   }
   private loadExternalJsFile() {
-    if (!this.config.jsFile) return
-    this.relativePath = path.resolve(__dirname, this.config.jsFile)
+    if (!this.config.jsFile) {
+      return
+    }
+    this.relativePath = resolve(__dirname, this.config.jsFile)
     try {
-      this.scriptString = fs.readFileSync(this.relativePath, 'utf8');
+      this.scriptString = fs.readFileSync(this.relativePath, 'utf8')
       debug('external file %s loaded', this.relativePath)
     } catch (error) {
       debug('load external file has error!', error)
-      throw error;
+      throw error
     }
   }
   public async translate(text: string) {
@@ -78,7 +81,7 @@ export default class ExternalApi implements yuki.Translator {
       result: '',
       console: console,
       require: require,
-      mp3Url: "",
+      mp3Url: ''
     }
     vm.createContext(vmContent)
     return vmContent

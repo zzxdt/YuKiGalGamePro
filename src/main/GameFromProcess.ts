@@ -19,8 +19,7 @@ export default class GameFromProcess extends BaseGame {
   public start() {
     try {
       this.afterGetPids()
-    }
-    catch (e) {
+    } catch (e) {
       console.log(e)
     }
   }

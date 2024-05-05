@@ -1,5 +1,8 @@
-import axios from "axios";
-export async function checkWordExistsInAnki(frontText: string, baseAnkiUrl: string): Promise<boolean> {
+import axios from 'axios'
+export async function checkWordExistsInAnki(
+  frontText: string,
+  baseAnkiUrl: string
+): Promise<boolean> {
   try {
     const response = await axios.post(baseAnkiUrl, {
       action: 'findNotes',
@@ -7,14 +10,14 @@ export async function checkWordExistsInAnki(frontText: string, baseAnkiUrl: stri
       params: {
         query: `deck:GalGame text:"${frontText}"` // 根据实际情况调整查询条件
       }
-    });
+    })
     if (response.data.result.length > 0) {
-      return true;
+      return true
     } else {
-      return false;
+      return false
     }
   } catch (error) {
-    console.error('Error checking card in Anki:', error);
-    return false;
+    console.error('Error checking card in Anki:', error)
+    return false
   }
 }

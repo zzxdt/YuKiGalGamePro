@@ -4,22 +4,25 @@ import { logger } from './Log/LogCollector'
 export default class Processes {
   public static async get() {
     return new Promise<yuki.Processes>((resolve, reject) => {
-      exec(`${Processes.CHCP_COMMAND} & ${Processes.TASK_LIST_COMMAND}`, (err, stdout: string, stderr) => {
-        if (err) {
-          logger.error('exec failed !> %s', err)
-          reject()
-          return
+      exec(
+        `${Processes.CHCP_COMMAND} & ${Processes.TASK_LIST_COMMAND}`,
+        (err, stdout: string, stderr) => {
+          if (err) {
+            logger.error('exec failed !> %s', err)
+            reject()
+            return
+          }
+          if (this.findsProcessIn(stdout)) {
+            const result = this.parseProcessesFrom(stdout)
+            logger.debug('get %d processes', result.length)
+            // 返回进程数组
+            resolve(result)
+          } else {
+            logger.debug('exec failed. no process:', `${stderr}`)
+            reject()
+          }
         }
-        if (this.findsProcessIn(stdout)) {
-          const result = this.parseProcessesFrom(stdout)
-          logger.debug('get %d processes', result.length)
-          // 返回进程数组
-          resolve(result)
-        } else {
-          logger.debug('exec failed. no process:', `${stderr}`)
-          reject()
-        }
-      })
+      )
     })
   }
   private static CHCP_COMMAND = 'chcp 65001'

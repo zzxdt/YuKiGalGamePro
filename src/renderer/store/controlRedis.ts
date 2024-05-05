@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 interface RedisWord {
-  key: string;
-  value: Record<string, string>;
+  key: string
+  value: Record<string, string>
 }
 export interface ApiResponse {
-  success: boolean;
-  error?: string;
+  success: boolean
+  error?: string
 }
 const redisStore = defineStore('redisStore', {
   state: () => ({
@@ -34,7 +34,7 @@ const redisStore = defineStore('redisStore', {
     },
     //考虑到性能问题，暂时不考虑
     checkAllInAnki() {
-      this.wordInfo.forEach(word => {
+      this.wordInfo.forEach((word) => {
         window.mainApi.checkWordInAnki(word.value.original)
       })
     },
@@ -57,5 +57,5 @@ const redisStore = defineStore('redisStore', {
       this.redisIsStart = value
     }
   }
-});
+})
 export { redisStore }

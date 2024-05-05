@@ -15,7 +15,7 @@ export default class TextInterceptorMiddleware implements yuki.Middleware<yuki.T
     this.TextReplacementRules = [
       { pattern: /[\x00-\x20]+/g, replacement: '' }, // 去除特殊符号和控制字符
       { pattern: /_t.*?\//g, replacement: '' },
-      { pattern: /[【】]/g, replacement: '' },
+      { pattern: /[【】]/g, replacement: '' }
     ]
     if (this.removeAscii) {
       this.TextReplacementRules.push({ pattern: /[\x00-\xFF]+/g, replacement: '' })
@@ -33,13 +33,13 @@ export default class TextInterceptorMiddleware implements yuki.Middleware<yuki.T
     context: yuki.TextOutputObject,
     next: (newContext: yuki.TextOutputObject) => Promise<void>
   ): Promise<void> {
-    this.TextReplacementRules.forEach(rule => {
+    this.TextReplacementRules.forEach((rule) => {
       context.text = context.text.replace(rule.pattern, rule.replacement)
     })
     if (context.text !== '') {
       await next(context)
     } else {
-      debug('Processed text is empty after modifications.');
+      debug('Processed text is empty after modifications.')
     }
   }
 }

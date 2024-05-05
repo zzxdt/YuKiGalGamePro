@@ -2,8 +2,8 @@ const axios = this.axios
 const crypto = this.crypto
 const debug = require('debug')('translator:YouDaoTranslator')
 function createInput(q) {
-  if (q.length <= 20) return q;
-  return q.substring(0, 10) + q.length + q.substring(q.length - 10);
+  if (q.length <= 20) return q
+  return q.substring(0, 10) + q.length + q.substring(q.length - 10)
 }
 function createSignature(appid, query, salt, curtime, appKey) {
   const input = createInput(query)
@@ -11,19 +11,20 @@ function createSignature(appid, query, salt, curtime, appKey) {
   return crypto.createHash('sha256').update(str).digest('hex')
 }
 async function youdaoTranslate(text) {
-  const youdaoUrl = "https://openapi.youdao.com/api"
-  //有道翻译密钥
-  const appKey = ""
-  const appSecret = ""
-  const from = "ja"
-  const to = "zh-CHS"
+  const youdaoUrl = 'https://openapi.youdao.com/api'
+  const USER_AGENT =
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.35'
+  const appKey = ''
+  const appSecret = ''
+  const from = 'ja'
+  const to = 'zh-CHS'
   const salt = crypto.randomUUID()
-  const curTime = Math.floor(Date.now() / 1000);
-  const ext = "mp3"
+  const curTime = Math.floor(Date.now() / 1000)
+  const ext = 'mp3'
   const voice = 0
   const speed = 1
   const volume = 3
-  const voiceName = "youkejiang"
+  const voiceName = 'youkejiang'
   const sign = createSignature(appKey, text, salt, curTime, appSecret)
   const params = {
     q: text,

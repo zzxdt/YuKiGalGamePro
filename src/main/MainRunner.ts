@@ -3,9 +3,11 @@ import Constants from './utils/Constants'
 import IPCs from './IPCs'
 import IpcTypes from '@/common/IpcTypes'
 import ConfigManager from './config/ConfigManager'
-import path from 'path'
-export const createMainWindow = async (mainWindow: BrowserWindow): Promise<BrowserWindow> => {
-  const icon = path.resolve(__dirname, '../../src/renderer/asserts/icon/whiteyuki.png')
+import { resolve } from 'path'
+export const createMainWindow = async (
+  mainWindow: BrowserWindow | null
+): Promise<BrowserWindow> => {
+  const icon = resolve(__dirname, '../../static/images/whiteyuki.png')
   mainWindow = new BrowserWindow({
     title: Constants.APP_NAME,
     show: false,
@@ -13,10 +15,6 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
     height: 752,
     frame: false,
     icon: icon,
-    minWidth: 1000,
-    maxWidth: 1050,
-    minHeight: 500,
-    maxHeight: 752,
     useContentSize: true,
     webPreferences: Constants.DEFAULT_WEB_PREFERENCES
   })
@@ -24,17 +22,24 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
   mainWindow.setMenu(null)
   mainWindow.webContents.on('did-finish-load', () => {
     // 加载完成后发送数据到渲染进程，使用主进程发送直接接受就行
-    const gamesData = ConfigManager.getInstance().get('games');
+    const gamesData = ConfigManager.getInstance().get('games')
     const defauleConfig = ConfigManager.getInstance().get('default')
     const textsData = ConfigManager.getInstance().get('texts')
-    mainWindow.webContents.send(IpcTypes.HAS_CONFIG, 'games', gamesData);
-    mainWindow.webContents.send(IpcTypes.HAS_CONFIG, 'default', defauleConfig)
-    mainWindow.webContents.send(IpcTypes.HAS_CONFIG, 'texts', textsData)
-  });
+    if (mainWindow) {
+      mainWindow.webContents.send(IpcTypes.HAS_CONFIG, 'games', gamesData)
+      mainWindow.webContents.send(IpcTypes.HAS_CONFIG, 'default', defauleConfig)
+      mainWindow.webContents.send(IpcTypes.HAS_CONFIG, 'texts', textsData)
+    }
+  })
   mainWindow.once('ready-to-show', (): void => {
-    mainWindow.show()
-    mainWindow.focus()
-    mainWindow.setAlwaysOnTop(false)
+    if (mainWindow) {
+      mainWindow.show()
+      mainWindow.focus()
+      mainWindow.setAlwaysOnTop(false)
+    }
+  })
+  mainWindow.on('closed', () => {
+    mainWindow = null
   })
   // Initialize IPC Communication
   IPCs.initialize(mainWindow)
@@ -44,7 +49,6 @@ export const createMainWindow = async (mainWindow: BrowserWindow): Promise<Brows
   } else {
     await mainWindow.loadFile(Constants.APP_INDEX_URL_PROD)
   }
-
   return mainWindow
 }
 

@@ -42,7 +42,7 @@ export default class TranslatorWindow {
         defaultFontFamily: {
           standard: 'Microsoft Yahei UI',
           serif: 'Microsoft Yahei UI',
-          sansSerif: 'Microsoft Yahei UI',
+          sansSerif: 'Microsoft Yahei UI'
         },
         ...Constants.DEFAULT_WEB_PREFERENCES
       },
@@ -77,29 +77,35 @@ export default class TranslatorWindow {
     // 初始化事件
     IPCs.initializeTranslatorWindow(this.TranslatorWindow)
     //监视窗口
-    this.TranslatorWindow.on('resize', debounce(() => {
-      let { width, height } = this.TranslatorWindow.getBounds()
-      this.TranslatorWindow.webContents.send(IpcTypes.WINDOWS_RESIZE, { width, height })
-    }, 300))
+    this.TranslatorWindow.on(
+      'resize',
+      debounce(() => {
+        let { width, height } = this.TranslatorWindow.getBounds()
+        this.TranslatorWindow.webContents.send(IpcTypes.WINDOWS_RESIZE, { width, height })
+      }, 300)
+    )
     //退出保存
     this.TranslatorWindow.on('close', (event) => {
       if (!this.isRealClose) {
-        event.preventDefault()
-        this.TranslatorWindow.hide()
+        event.preventDefault() // 阻止窗口关闭
+        this.TranslatorWindow.hide() // 隐藏窗口
+      } else {
+        // 仅在窗口实际关闭时保存状态
+        logger.debug('saving translator window bounds -> %o', this.TranslatorWindow.getBounds())
+        logger.debug(
+          'saving translator window alwaysOnTop -> %s',
+          this.TranslatorWindow.isAlwaysOnTop()
+        )
+        ConfigManager.getInstance().set<yuki.Config.Gui>('gui', {
+          ...ConfigManager.getInstance().get('gui'),
+          translatorWindow: {
+            ...ConfigManager.getInstance().get<yuki.Config.Gui>('gui').translatorWindow,
+            bounds: this.TranslatorWindow.getBounds()
+          }
+        })
       }
-      logger.debug('saving translator window bounds -> %o', this.TranslatorWindow.getBounds())
-      logger.debug('saving translator window alwaysOnTop -> %s', this.TranslatorWindow.isAlwaysOnTop())
-      ConfigManager.getInstance().set<yuki.Config.Gui>('gui', {
-        ...ConfigManager.getInstance().get('gui'),
-        translatorWindow: {
-          ...ConfigManager.getInstance().get<yuki.Config.Gui>('gui').translatorWindow,
-          bounds: this.TranslatorWindow.getBounds(),
-        }
-      })
     })
-    this.TranslatorWindow.setBounds(
-      this.config.bounds
-    )
+    this.TranslatorWindow.setBounds(this.config.bounds)
     if (Constants.IS_DEV_ENV) {
       this.TranslatorWindow.loadURL(Constants.APP_TRANSLATOR_URL_DEV)
     } else {

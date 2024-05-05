@@ -47,13 +47,13 @@ declare module '@vue/runtime-core' {
     $prompt(content: string, options: MessageOptions, title: string): Promise<MessageReturn>
     $toast: Toast
     $dialog: {
-      create: (options: CreateDialogOptions) => Promise<string>;
-      warn: (options: BasicDialogOptions) => Promise<string>;
-      error: (options: BasicDialogOptions) => Promise<string>;
-      info: (options: BasicDialogOptions) => Promise<string>;
-      success: (options: BasicDialogOptions) => Promise<string>;
-      confirm: (options: ConfirmDialogOptions) => Promise<boolean>;
-    };
+      create: (options: CreateDialogOptions) => Promise<string>
+      warn: (options: BasicDialogOptions) => Promise<string>
+      error: (options: BasicDialogOptions) => Promise<string>
+      info: (options: BasicDialogOptions) => Promise<string>
+      success: (options: BasicDialogOptions) => Promise<string>
+      confirm: (options: ConfirmDialogOptions) => Promise<boolean>
+    }
   }
 }
 export type ToastPosition =

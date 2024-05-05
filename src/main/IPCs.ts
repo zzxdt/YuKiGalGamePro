@@ -20,7 +20,6 @@ let runningGame: BaseGame
 let translatorWindow: TranslatorWindow | null
 export default class IPCs {
   static initialize(mainWindow: BrowserWindow): void {
-
     // Get application version
     ipcMain.on('msgRequestGetVersion', (event: IpcMainEvent) => {
       event.returnValue = Constants.APP_VERSION
@@ -32,18 +31,17 @@ export default class IPCs {
     })
     //监视redis是否开启
     ipcMain.on(IpcTypes.REDIS_STATUS, (event: IpcMainEvent, status: boolean) => {
-      console.log("redis状态:", status)
       event.sender.send(IpcTypes.CURRENT_REDIS_STATUS, status)
     })
     //显示主窗口
     ipcMain.on(IpcTypes.SHOW_MAINWINDOWS, (event: IpcMainEvent) => {
-      if (!mainWindow.isDestroyed()) {
+      if (mainWindow && !mainWindow.isDestroyed()) {
         mainWindow.show()
       }
     })
     ipcMain.on(IpcTypes.RESTART_APP, (event: IpcMainEvent) => {
       app.relaunch()
-      app.exit(0);
+      app.exit(0)
     })
     // ipcMain主进程对应index.ts
     ipcMain.on(IpcTypes.MINISIZE_APP, () => {
@@ -64,11 +62,12 @@ export default class IPCs {
           event.reply(IpcTypes.HAS_PATH_WITH_FILE, filePaths[0])
         }
       } catch (e) {
-        logger.error("get path with file failure!", e)
+        logger.error('get path with file failure!', e)
       }
     })
+    //退出程序
     ipcMain.on(IpcTypes.CLOSE_APP, () => {
-      app.quit()
+      app.exit(0)
     })
     //改变窗口大小
     ipcMain.on(IpcTypes.RESIZE_WINDOWS, (event: IpcMainEvent, x: number, y: number) => {
@@ -78,16 +77,13 @@ export default class IPCs {
       }
     })
     // translator下添加特殊码 no
-    ipcMain.on(
-      IpcTypes.REQUEST_INSERT_HOOK,
-      (event: Electron.IpcMainEvent, code: string) => {
-        if (code !== '') {
-          runningGame.getPids().map((pid) => {
-            Hooker.getInstance().insertHook(pid, code)
-          })
-        }
+    ipcMain.on(IpcTypes.REQUEST_INSERT_HOOK, (event: Electron.IpcMainEvent, code: string) => {
+      if (code !== '') {
+        runningGame.getPids().map((pid) => {
+          Hooker.getInstance().insertHook(pid, code)
+        })
       }
-    )
+    })
     // 请求进程
     ipcMain.on(IpcTypes.REQUEST_PROCESSES, async (event: IpcMainEvent) => {
       try {
@@ -103,18 +99,18 @@ export default class IPCs {
       IpcTypes.REQUEST_RUN_GAME,
       (event: IpcMainEvent, game?: yuki.Game, process?: yuki.Process) => {
         if (game) {
-          runningGame = new Game(game);
+          runningGame = new Game(game)
         } else if (process) {
-          runningGame = new GameFromProcess(process);
+          runningGame = new GameFromProcess(process)
         } else {
-          return;
+          return
         }
         // 设置游戏状态改变时的处理逻辑
-        runningGame.on('started', handleGameStarted);
-        runningGame.on('exited', handleGameExited);
-        runningGame.on('abort', handleGameAborted);
+        runningGame.on('started', handleGameStarted)
+        runningGame.on('exited', handleGameExited)
+        runningGame.on('abort', handleGameAborted)
         // 启动游戏
-        runningGame.start();
+        runningGame.start()
       }
     )
     ipcMain.on(IpcTypes.OPEN_FLODER, (event: IpcMainEvent, path) => {
@@ -132,9 +128,9 @@ export default class IPCs {
       const { filePaths } = await dialog.showOpenDialog({
         properties: ['openFile'],
         filters: [{ name: '可执行文件', extensions: ['exe'] }]
-      });
+      })
       if (filePaths.length > 0) {
-        event.reply(IpcTypes.HAS_NEW_GAME_PATH, filePaths[0]);
+        event.reply(IpcTypes.HAS_NEW_GAME_PATH, filePaths[0])
       }
     })
     //更新config
@@ -150,14 +146,13 @@ export default class IPCs {
     //请求储存GuiConfig
     ipcMain.on(IpcTypes.REQUEST_SAVE_TRANSLATOR_GUI, (event: IpcMainEvent, cfg: any) => {
       logger.debug('request saving translator gui config...')
-      ConfigManager.getInstance().set<yuki.Config.Gui>(
-        'gui', {
+      ConfigManager.getInstance().set<yuki.Config.Gui>('gui', {
         ...ConfigManager.getInstance().get('gui'),
         translatorWindow: cfg
       })
       logger.debug('translator gui config saved')
     })
-    //请求储存DefaultConfig 
+    //请求储存DefaultConfig
     ipcMain.on(IpcTypes.REQUEST_SAVE_CONFIG, (event: IpcMainEvent, name: string, cfgs: any) => {
       const data = JSON.parse(cfgs)
       const configFileName = ConfigManager.getInstance().getFilename(name)
@@ -171,11 +166,13 @@ export default class IPCs {
     ipcMain.on(IpcTypes.REQUEST_REMOVE_GAME, async (event: IpcMainEvent, game: yuki.Game) => {
       try {
         const games = ConfigManager.getInstance().get<yuki.Config.Games>('games')
-        ConfigManager.getInstance().set<yuki.Config.Games>('games', games.filter((item: yuki.Game) => item.name !== game.name))
+        ConfigManager.getInstance().set<yuki.Config.Games>(
+          'games',
+          games.filter((item: yuki.Game) => item.name !== game.name)
+        )
         await sendConfig('games', event)
-      }
-      catch (e) {
-        logger.error("remove game failure!", e)
+      } catch (e) {
+        logger.error('remove game failure!', e)
       }
     })
     //debug信息
@@ -189,23 +186,23 @@ export default class IPCs {
         try {
           const games = ConfigManager.getInstance().get<yuki.Config.Games>('games')
           // 检查是否存在相同路径的游戏
-          const gameExists = games.some(game => game.path === newGame.path);
+          const gameExists = games.some((game) => game.path === newGame.path)
           if (!gameExists) {
-            logger.debug("has no same games!")
-            games.push(newGame);
-            logger.debug("add a new game")
-            await ConfigManager.getInstance().save('games');
+            logger.debug('has no same games!')
+            games.push(newGame)
+            logger.debug('add a new game')
+            await ConfigManager.getInstance().save('games')
             // 发送成功添加的消息
-            event.reply(IpcTypes.HAS_ADDED_GAME, newGame);
+            event.reply(IpcTypes.HAS_ADDED_GAME, newGame)
             await sendConfig('games', event)
           } else {
             // 如果游戏已存在，发送游戏已存在的消息
-            event.reply(IpcTypes.GAME_ALREADY_EXISTS, newGame);
+            event.reply(IpcTypes.GAME_ALREADY_EXISTS, newGame)
           }
         } catch (e) {
-          logger.error("add game card failure!", e)
+          logger.error('add game card failure!', e)
         }
-        // 返回'games' 和'games:[]'  
+        // 返回'games' 和'games:[]'
       }
     )
     //设置redis的具体函数
@@ -214,7 +211,7 @@ export default class IPCs {
         const deleteAllWordInfo = StoreInRedis.getInstance().deleteAllWordInfo()
         event.sender.send(IpcTypes.HAS_DELETE_ALL_FROM_REDIS, deleteAllWordInfo)
       } catch (error) {
-        logger.error("delete all data in redis failure!")
+        logger.error('delete all data in redis failure!')
       }
     })
     ipcMain.on(IpcTypes.CHECK_ALL_WORD_IN_REDIS, async (event: IpcMainEvent) => {
@@ -222,7 +219,7 @@ export default class IPCs {
         const result = await StoreInRedis.getInstance().checkAllWordInfo()
         event.sender.send(IpcTypes.HAS_ALL_WORD_FROM_REDIS, result)
       } catch (error) {
-        logger.error("check all data in redis failure!")
+        logger.error('check all data in redis failure!')
       }
     })
     ipcMain.on(IpcTypes.QUIT_REDIS, (event: IpcMainEvent) => {
@@ -234,37 +231,32 @@ export default class IPCs {
     // 返回对应的类型
     async function sendConfig(configName: string, event: Electron.IpcMainEvent) {
       const configData = ConfigManager.getInstance().get(configName)
-      event.reply(
-        IpcTypes.HAS_CONFIG,
-        configName,
-        configData
-      );
+      event.reply(IpcTypes.HAS_CONFIG, configName, configData)
     }
     // 主窗口和翻译窗口管理函数
     function closeTranslatorWindow() {
       if (translatorWindow) {
-        translatorWindow.close();
-        translatorWindow = null;
+        translatorWindow.close()
+        translatorWindow = null
       }
     }
     function handleGameStarted() {
-      mainWindow.hide();
-      mainWindow.webContents.send(IpcTypes.HAS_RUNNING_GAME);
-      closeTranslatorWindow();
-      translatorWindow = new TranslatorWindow();
-      translatorWindow.setGame(runningGame);
+      mainWindow.hide()
+      mainWindow.webContents.send(IpcTypes.HAS_RUNNING_GAME)
+      closeTranslatorWindow()
+      translatorWindow = new TranslatorWindow()
+      translatorWindow.setGame(runningGame)
     }
 
     function handleGameExited() {
-      closeTranslatorWindow();
-      mainWindow.show();
+      closeTranslatorWindow()
+      mainWindow.show()
     }
 
     function handleGameAborted() {
-      mainWindow.webContents.send(IpcTypes.GAME_ABORTED);
+      mainWindow.webContents.send(IpcTypes.GAME_ABORTED)
     }
   }
-
 
   //初始化，translatorWindows窗口
   static initializeTranslatorWindow(transltorWindow: BrowserWindow): void {
@@ -288,27 +280,41 @@ export default class IPCs {
       }
     })
     //打开anki进行传输数据
-    ipcMain.on(IpcTypes.SEND_TO_ANKI, async (event: IpcMainEvent, original: string, reading: string, translation: string, audioURL: string) => {
-      try {
-        const saveInanki = await AnkiManager.getInstance().addInAnki(original, reading, translation, audioURL)
-        event.sender.send(IpcTypes.HAS_ANKI, saveInanki)
-      } catch (error) {
-        logger.error('send to anki failure', error)
+    ipcMain.on(
+      IpcTypes.SEND_TO_ANKI,
+      async (
+        event: IpcMainEvent,
+        original: string,
+        reading: string,
+        translation: string,
+        audioURL: string
+      ) => {
+        try {
+          const saveInanki = await AnkiManager.getInstance().addInAnki(
+            original,
+            reading,
+            translation,
+            audioURL
+          )
+          event.sender.send(IpcTypes.HAS_ANKI, saveInanki)
+        } catch (error) {
+          logger.error('send to anki failure', error)
+        }
       }
-    })
+    )
     //检查anki中是否存在
     ipcMain.on(IpcTypes.CHECK_WORD_IN_ANKI, async (event: IpcMainEvent, original: string) => {
       try {
-        const hasWordInAnki = await AnkiManager.getInstance().checkInAnki(original);
-        event.sender.send(IpcTypes.HAS_WORD_IN_ANKI, hasWordInAnki);
+        const hasWordInAnki = await AnkiManager.getInstance().checkInAnki(original)
+        event.sender.send(IpcTypes.HAS_WORD_IN_ANKI, hasWordInAnki)
       } catch (error) {
-        logger.error("An error occurred:", error);
+        logger.error('An error occurred:', error)
       }
     })
     //移除anki中的单词
     ipcMain.on(IpcTypes.REMOVE_WORD_FROM_ANKI, async (event: IpcMainEvent, original: string) => {
-      const removeWord = await AnkiManager.getInstance().removeWordFromAnki(original);
-      event.sender.send(IpcTypes.HAS_REMOVE_WORD_FROM_ANKI, removeWord);
+      const removeWord = await AnkiManager.getInstance().removeWordFromAnki(original)
+      event.sender.send(IpcTypes.HAS_REMOVE_WORD_FROM_ANKI, removeWord)
     })
     // 打开网页的devTool工具
     ipcMain.on(IpcTypes.TOOGLE_DEV_TOOLS, (event) => {
@@ -334,14 +340,13 @@ export default class IPCs {
     //请求储存GuiConfig
     ipcMain.on(IpcTypes.REQUEST_SAVE_TRANSLATOR_GUI, (event: IpcMainEvent, cfg: any) => {
       logger.debug('request saving translator gui config...')
-      ConfigManager.getInstance().set<yuki.Config.Gui>(
-        'gui', {
+      ConfigManager.getInstance().set<yuki.Config.Gui>('gui', {
         ...ConfigManager.getInstance().get('gui'),
         translatorWindow: cfg
       })
       logger.debug('translator gui config saved')
     })
-    //请求储存DefaultConfig 
+    //请求储存DefaultConfig
     ipcMain.on(IpcTypes.REQUEST_SAVE_CONFIG, (event: IpcMainEvent, name: string, cfgs: any) => {
       const data = JSON.parse(cfgs)
       const configFileName = ConfigManager.getInstance().getFilename(name)
@@ -354,33 +359,55 @@ export default class IPCs {
     // 请求原文翻译
     ipcMain.on(IpcTypes.TRANSLATE_ORIGINAL_TEXT, async (event, text: string) => {
       try {
-        const translateOriginalText = await TranslationManager.getInstance().translateText(text, 'textTranslation')
+        const translateOriginalText = await TranslationManager.getInstance().translateText(
+          text,
+          'textTranslation'
+        )
         event.sender.send(IpcTypes.HAS_TRANSLATION, translateOriginalText)
-      }
-      catch (e) {
+      } catch (e) {
         throw new Error('ipc translate error')
       }
     })
     // mecab翻译
-    ipcMain.on(IpcTypes.TRANSLATE_MECAB_TEXT, async (event: IpcMainEvent, dataKey: string, text: string, reading: string, romaji: string, saveInAnki: string) => {
-      const selectDataKey = dataKey
-      const selectReading = reading
-      const seletcRomaji = romaji
-      const selectText = text
-      const seleSaveInAnki = saveInAnki
-      const translateOriginalText = await TranslationManager.getInstance().translateText(text, 'mecabTranslation')
-      // 返回meacab翻译结果
-      event.sender.send(IpcTypes.HAS_MECAB_TEXT, translateOriginalText)
-      if (typeof translateOriginalText === 'object' && 'mp3Url' in translateOriginalText) {
-        requestStoreInRedis(selectDataKey, selectText, translateOriginalText.result, translateOriginalText.mp3Url, selectReading, seletcRomaji, seleSaveInAnki)
+    ipcMain.on(
+      IpcTypes.TRANSLATE_MECAB_TEXT,
+      async (
+        event: IpcMainEvent,
+        dataKey: string,
+        text: string,
+        reading: string,
+        romaji: string,
+        saveInAnki: string
+      ) => {
+        const selectDataKey = dataKey
+        const selectReading = reading
+        const seletcRomaji = romaji
+        const selectText = text
+        const seleSaveInAnki = saveInAnki
+        const translateOriginalText = await TranslationManager.getInstance().translateText(
+          text,
+          'mecabTranslation'
+        )
+        // 返回meacab翻译结果
+        event.sender.send(IpcTypes.HAS_MECAB_TEXT, translateOriginalText)
+        if (typeof translateOriginalText === 'object' && 'mp3Url' in translateOriginalText) {
+          requestStoreInRedis(
+            selectDataKey,
+            selectText,
+            translateOriginalText.result,
+            translateOriginalText.mp3Url,
+            selectReading,
+            seletcRomaji,
+            seleSaveInAnki
+          )
+        }
       }
-    })
+    )
     ipcMain.on(IpcTypes.CHECK_WORD_IN_REDIS, async (event: IpcMainEvent, dataKey: string) => {
       try {
         const result = await StoreInRedis.getInstance().checkWordInfo(dataKey)
         event.sender.send(IpcTypes.HAS_CHECK_MECAB_EXIST, result)
-      }
-      catch (e) {
+      } catch (e) {
         console.log(e)
       }
     })
@@ -389,44 +416,52 @@ export default class IPCs {
       try {
         const result = await StoreInRedis.getInstance().getWordInfo(dataKey)
         event.sender.send(IpcTypes.HAS_MECAB_TEXT_IN_REDIS_INFO, result)
-      }
-      catch (e) {
+      } catch (e) {
         console.log(e)
       }
     })
     // 获取窗口总在最上方
     ipcMain.on(IpcTypes.TOGGLE_ALWAYS_ON_TOP, (event: IpcMainEvent) => {
-      const focusedWindow = BrowserWindow.getFocusedWindow();
+      const focusedWindow = BrowserWindow.getFocusedWindow()
       if (focusedWindow) {
-        const currentStatus = focusedWindow.isAlwaysOnTop();
-        focusedWindow.setAlwaysOnTop(!currentStatus);
-        event.reply(IpcTypes.ALWAYS_ON_TOP_CHANGED, !currentStatus);
+        const currentStatus = focusedWindow.isAlwaysOnTop()
+        focusedWindow.setAlwaysOnTop(!currentStatus)
+        event.reply(IpcTypes.ALWAYS_ON_TOP_CHANGED, !currentStatus)
       }
-    });
-    ipcMain.on(
-      IpcTypes.REQUEST_SAVE_TRANSLATOR_GUI,
-      (event: IpcMainEvent, cfg: any) => {
-        logger.debug('request saving translator gui config...')
-        ConfigManager.getInstance().set<yuki.Config.Gui>('gui', {
-          ...ConfigManager.getInstance().get('gui'),
-          translatorWindow: cfg
-        })
-        logger.debug('translator gui config saved')
-      }
-    )
+    })
+    ipcMain.on(IpcTypes.REQUEST_SAVE_TRANSLATOR_GUI, (event: IpcMainEvent, cfg: any) => {
+      logger.debug('request saving translator gui config...')
+      ConfigManager.getInstance().set<yuki.Config.Gui>('gui', {
+        ...ConfigManager.getInstance().get('gui'),
+        translatorWindow: cfg
+      })
+      logger.debug('translator gui config saved')
+    })
     // 返回对应的类型
     async function sendConfig(configName: string, event: Electron.IpcMainEvent) {
       const configData = ConfigManager.getInstance().get(configName)
-      event.reply(
-        IpcTypes.HAS_CONFIG,
-        configName,
-        configData
-      );
+      event.reply(IpcTypes.HAS_CONFIG, configName, configData)
     }
     //redis操作
-    async function requestStoreInRedis(dataKey: string, text: string, translation: string, audioUrl: string, reading: string, romaji: string, saveInAnki: string) {
+    async function requestStoreInRedis(
+      dataKey: string,
+      text: string,
+      translation: string,
+      audioUrl: string,
+      reading: string,
+      romaji: string,
+      saveInAnki: string
+    ) {
       try {
-        await StoreInRedis.getInstance().storeWordInfo(dataKey, text, translation, audioUrl, reading, romaji, saveInAnki);
+        await StoreInRedis.getInstance().storeWordInfo(
+          dataKey,
+          text,
+          translation,
+          audioUrl,
+          reading,
+          romaji,
+          saveInAnki
+        )
       } catch (error) {
         logger.error(`fail to save in redis the key is:${dataKey}`)
       }

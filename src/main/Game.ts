@@ -6,50 +6,43 @@ const spawn = require('child_process').spawn
 export default class Game extends BaseGame {
   private static readonly TIMEOUT = 1000
   private static readonly MAX_RESET_TIME = 10
-  private execString: string
   private path: string
   private code: string
   private name: string
+  private localChangers: yuki.Config.LocaleChangerItems
   private localeChanger: string
   private exeName: string
-  // private processName:string
+  private execPath: string
   constructor(game: yuki.Game) {
     super()
     this.path = game.path
-    this.execString = ''
     this.pids = []
     this.code = game.code
     this.name = game.name
     this.localeChanger = game.localeChanger
     this.exeName = this.path.substring(this.path.lastIndexOf('\\') + 1)
+    this.localChangers =
+      ConfigManager.getInstance().get<yuki.Config.Default>('default').localeChangers
+    this.execPath = this.localChangers[this.localeChanger].exec
   }
-
   public start() {
-    this.execGameProcess()
     this.registerHookerWithPid()
   }
-  private async execGameProcess() {
-    this.getRawExecStringOrDefault()
-    this.replaceExecStringTokensWithActualValues()
-    exec(this.execString, (error, stdout, stderr) => {
-      if (error) {
-        logger.error('Error executing game:', error);
-        return;
+  //启动游戏
+  private async startGame() {
+    try {
+      if (this.execPath === '' || this.execPath === '%GAME_PATH%') {
+        const gameProcess = spawn(this.path, [], { detached: true, stdio: 'ignore' })
+        gameProcess.unref()
+      } else {
+        const args = ['-run', this.path]
+        const gameProcess = spawn(this.execPath, args, { detached: true, stdio: 'ignore' })
+        gameProcess.unref()
       }
-      logger.info('Game launched successfully.');
-    });
-  }
-  //localEnum转区工具
-  private getRawExecStringOrDefault() {
-    const LocalChangers = ConfigManager.getInstance().get<yuki.Config.Default>('default').localeChangers
-    if (this.localeChanger) {
-      this.execString = `${LocalChangers[this.localeChanger].exec} -run '%GAME_PATH%'`;
-    } else {
-      this.execString = '%GAME_PATH%'
+    } catch (error) {
+      logger.error('start gaming error:', error)
+      throw error
     }
-  }
-  private replaceExecStringTokensWithActualValues() {
-    this.execString = this.execString.replace('%GAME_PATH%', `${this.path}`)
   }
   public getInfo(): yuki.Game {
     return {
@@ -74,41 +67,28 @@ export default class Game extends BaseGame {
       this.emit('exited')
       return
     }
+  }
 
-  }
-  private async startGame() {
-    try {
-      const gameProcess = spawn(this.path, [], { detached: true, stdio: 'ignore' });
-      gameProcess.unref(); // 这允许Node.js程序退出，即使游戏仍在运行
-    }
-    catch (error) {
-      logger.error('start gameing error:', error);
-      throw error;
-    }
-  }
   private async findPids() {
     return new Promise((resolve, reject) => {
       let retryTimes = 0
       const pidGetterInterval = setInterval(() => {
-        exec(
-          `tasklist /nh /fo csv /fi "imagename eq ${this.exeName}"`,
-          (err, stdout, stderr) => {
-            if (err) throw err
-            if (retryTimes >= Game.MAX_RESET_TIME) {
-              clearInterval(pidGetterInterval)
-              reject()
-            }
-            if (this.findsPidsIn(stdout)) {
-              clearInterval(pidGetterInterval)
-              this.pids = this.parsePidsFrom(stdout)
-              logger.debug('has findProcess name is', this.pids)
-              resolve(this.pids)
-            } else {
-              retryTimes++
-              logger.debug('could not find game. retry times...', retryTimes)
-            }
+        exec(`tasklist /nh /fo csv /fi "imagename eq ${this.exeName}"`, (err, stdout, stderr) => {
+          if (err) throw err
+          if (retryTimes >= Game.MAX_RESET_TIME) {
+            clearInterval(pidGetterInterval)
+            reject()
           }
-        )
+          if (this.findsPidsIn(stdout)) {
+            clearInterval(pidGetterInterval)
+            this.pids = this.parsePidsFrom(stdout)
+            logger.debug('has findProcess name is', this.pids)
+            resolve(this.pids)
+          } else {
+            retryTimes++
+            logger.debug('could not find game. retry times...', retryTimes)
+          }
+        })
       }, Game.TIMEOUT)
     })
   }

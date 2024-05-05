@@ -14,9 +14,9 @@
 </template>
 
 <script setup>
-import { YkPageHeader, YkGamePageGameCard } from '.';
-import { configStore } from '@/renderer/store/config';
-import { computed } from 'vue';
+import { YkPageHeader, YkGamePageGameCard } from '.'
+import { configStore } from '@/renderer/store/config'
+import { computed } from 'vue'
 const useConfig = configStore()
 const games = computed(() => {
   return useConfig.games

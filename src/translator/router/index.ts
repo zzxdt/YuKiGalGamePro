@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { TranslateSettingPage, TranslatorHookPage, TranslatorPage }
-  from '../components/index'
+import { TranslateSettingPage, TranslatorHookPage, TranslatorPage } from '../components/index'
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -21,4 +20,4 @@ export default createRouter({
       component: TranslateSettingPage
     }
   ]
-})  
+})

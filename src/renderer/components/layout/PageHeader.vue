@@ -1,9 +1,7 @@
 <!-- 游戏首界面头部 -->
 <template>
   <v-app-bar app color="primary" dark class="app-header" height="68" fixed>
-    <v-toolbar-title >{{
-      yktitle
-    }}</v-toolbar-title>
+    <v-toolbar-title>{{ yktitle }}</v-toolbar-title>
     <!-- 标题 -->
     <v-btn icon class="manipulate-button" @click="minimizeWindow">
       <v-icon>mdi-minus</v-icon>

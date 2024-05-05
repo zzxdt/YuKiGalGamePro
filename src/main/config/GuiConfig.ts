@@ -20,9 +20,7 @@ export default class GuiConfig extends Config {
         bounds: {
           width: Math.trunc(displaySize.width * translatorWindowWidthRatio),
           height: Math.trunc(displaySize.height * translatorWindowHeightRatio * 2),
-          x: Math.trunc(
-            displaySize.width * ((1 - translatorWindowWidthRatio) / 2)
-          ),
+          x: Math.trunc(displaySize.width * ((1 - translatorWindowWidthRatio) / 2)),
           y: Math.trunc(displaySize.height * 0.05)
         },
         originalText: {
@@ -35,7 +33,7 @@ export default class GuiConfig extends Config {
           margin: 0.7
         },
         mecabReading: {
-          fontSize: 0.6,
+          fontSize: 0.6
         },
         mecabText: {
           fontSize: 1.5,
@@ -44,22 +42,25 @@ export default class GuiConfig extends Config {
         sizes: {
           '/translate': {
             x: Math.trunc(displaySize.width * ((1 - mainWindowWidthRatio) / 2)),
-            y: Math.trunc(displaySize.height * ((1 - mainWindowHeightRatio) / 2)), width: Math.trunc(displaySize.width * translatorWindowWidthRatio * 1.25),
-            height: Math.trunc(displaySize.height * translatorWindowHeightRatio * 1.25),
+            y: Math.trunc(displaySize.height * ((1 - mainWindowHeightRatio) / 2)),
+            width: Math.trunc(displaySize.width * translatorWindowWidthRatio * 1.25),
+            height: Math.trunc(displaySize.height * translatorWindowHeightRatio * 1.25)
           },
           '/hook': {
             x: Math.trunc(displaySize.width * ((1 - mainWindowWidthRatio) / 2)),
-            y: Math.trunc(displaySize.height * ((1 - mainWindowHeightRatio) / 2)), width: Math.trunc(displaySize.width * translatorWindowWidthRatio),
-            height: Math.trunc(displaySize.height * translatorWindowHeightRatio * 2),
+            y: Math.trunc(displaySize.height * ((1 - mainWindowHeightRatio) / 2)),
+            width: Math.trunc(displaySize.width * translatorWindowWidthRatio),
+            height: Math.trunc(displaySize.height * translatorWindowHeightRatio * 2)
           },
           '/setting': {
             x: Math.trunc(displaySize.width * ((1 - mainWindowWidthRatio) / 2)),
-            y: Math.trunc(displaySize.height * ((1 - mainWindowHeightRatio) / 2)), width: Math.trunc(displaySize.width * translatorWindowWidthRatio),
-            height: Math.trunc(displaySize.height * translatorWindowHeightRatio * 2.5),
-          },
+            y: Math.trunc(displaySize.height * ((1 - mainWindowHeightRatio) / 2)),
+            width: Math.trunc(displaySize.width * translatorWindowWidthRatio),
+            height: Math.trunc(displaySize.height * translatorWindowHeightRatio * 2.5)
+          }
         },
         background: '#000000BD',
-        renderMode: 'transparent',
+        renderMode: 'transparent'
       }
     }
   }

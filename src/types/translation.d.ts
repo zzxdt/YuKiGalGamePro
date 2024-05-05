@@ -7,7 +7,7 @@ declare namespace yuki {
   }
 
   export interface Translator {
-    async translate(text: string)
+    translate(text: string)
     isEnable(): boolean
     setEnable(isEnable: boolean): void
     getName(): string

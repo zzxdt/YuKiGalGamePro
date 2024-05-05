@@ -5,12 +5,12 @@ const sidebarLinks = [
   { path: '/addgame', icon: 'mdi-plus-box-multiple', text: 'mainSilderBar.addGame' },
   // { path: '/debugMessage', icon: 'mdi-alert', text: 'mainSilderBar.debugMsg' },
   { path: '/about', icon: 'mdi-information', text: 'mainSilderBar.aboutYUKI' },
-  { path: '/mygamelist', icon: 'mdi-controller', text: 'mainSilderBar.mygameList' },
+  { path: '/mygamelist', icon: 'mdi-controller', text: 'mainSilderBar.mygameList' }
   // { path: '/textscreen', icon: 'mdi-invoice-text', text: 'mainSilderBar.textScreen', }
 ]
 // 设置
 const settingBar = [
-  { path: '/setting', icon: 'mdi-cog', text: 'mainSilderBar.applicationSettings', }
+  { path: '/setting', icon: 'mdi-cog', text: 'mainSilderBar.applicationSettings' }
 ]
 // 设置内子内容
 const settingBarChildren = [

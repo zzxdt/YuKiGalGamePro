@@ -1,10 +1,10 @@
 const baseAnkiUrl: string = 'http://127.0.0.1:8765'
-import { AddWordInAnki } from "../ankiTranslator/AddAnkiWord";
-import { checkWordExistsInAnki } from "../ankiTranslator/CheckWordInAnki";
-import { deleteWordFromAnki } from "../ankiTranslator/RemoveWordFromAnki";
+import { AddWordInAnki } from '../ankiTranslator/AddAnkiWord'
+import { checkWordExistsInAnki } from '../ankiTranslator/CheckWordInAnki'
+import { deleteWordFromAnki } from '../ankiTranslator/RemoveWordFromAnki'
 interface AnkiAddNoteResponse {
-  success: boolean;
-  error?: string;
+  success: boolean
+  error?: string
 }
 export default class AnkiManager {
   private baseAnkiUrl: string
@@ -19,7 +19,12 @@ export default class AnkiManager {
     this.baseAnkiUrl = baseAnkiUrl
   }
   private static instance: AnkiManager | undefined
-  public async addInAnki(original: string, reading: string, translation: string, audioURL: string): Promise<AnkiAddNoteResponse> {
+  public async addInAnki(
+    original: string,
+    reading: string,
+    translation: string,
+    audioURL: string
+  ): Promise<AnkiAddNoteResponse> {
     return AddWordInAnki(original, reading, translation, audioURL, this.baseAnkiUrl)
   }
   public async checkInAnki(original: string): Promise<boolean> {

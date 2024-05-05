@@ -1,13 +1,10 @@
 <template>
   <div class="wrapper">
-    <slot>
-
-    </slot>
+    <slot> </slot>
   </div>
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
 <style scoped>
 .wrapper {

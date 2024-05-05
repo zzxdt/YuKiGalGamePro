@@ -12,9 +12,9 @@ class ConfigIpcService {
     window.mainApi.loadGameAtStart('default')
     window.mainApi.receive(IpcTypes.HAS_CONFIG, (name: string, cfgs: any) => {
       try {
-        useConfigStore.setConfig({ name, cfgs });
+        useConfigStore.setConfig({ name, cfgs })
       } catch (error) {
-        console.error('Error handling IPC config message:', error);
+        console.error('Error handling IPC config message:', error)
       }
     })
     window.mainApi.receive(IpcTypes.HAS_PROCESSES, (processes: yuki.Processes) => {

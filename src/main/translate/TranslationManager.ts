@@ -1,9 +1,9 @@
-import ExternalApi from "./ExternalApi"
-import ConfigManager from "../config/ConfigManager"
-const debug = require("debug")("app:TranslationManager");
+import ExternalApi from './ExternalApi'
+import ConfigManager from '../config/ConfigManager'
+const debug = require('debug')('app:TranslationManager')
 export default class TranslationManager {
-  private lastText = "";
-  private lastResult = "";
+  private lastText = ''
+  private lastResult = ''
   public static getInstance(): TranslationManager {
     if (!this.instance) {
       this.instance = new TranslationManager()
@@ -12,7 +12,7 @@ export default class TranslationManager {
   }
   private static instance: TranslationManager | undefined
   private apis: Map<string, ExternalApi[]> = new Map()
-  private configs: Array<yuki.Config.OnlineApiItem> = [];
+  private configs: Array<yuki.Config.OnlineApiItem> = []
   constructor() {
     this.configs = ConfigManager.getInstance().get<yuki.Config.Default>('default').onlineApis
     this.initializeApis(this.configs)
@@ -35,10 +35,10 @@ export default class TranslationManager {
     }
     try {
       if (text === this.lastText) {
-        debug('same text skim it!');
-        return this.lastResult;
+        debug('same text skim it!')
+        return this.lastResult
       }
-      this.lastText = text;
+      this.lastText = text
       const translationResult = await apis[0].translate(text)
       this.lastResult = translationResult.result
       debug('textTranslationManagerLastResult：', this.lastResult)

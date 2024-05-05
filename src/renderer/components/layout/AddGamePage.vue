@@ -4,11 +4,20 @@
     <v-stepper v-model="activeStep" vertical class="stepper-custom" alt-labels non-linear>
       <!-- 跳转头 -->
       <v-stepper-header>
-        <v-stepper-item :complete="activeStep > 1" :title="$t('AddGamePage.chooseGamePath')" value="1" step="1">
+        <v-stepper-item
+          :complete="activeStep > 1"
+          :title="$t('AddGamePage.chooseGamePath')"
+          value="1"
+          step="1"
+        >
         </v-stepper-item>
         <v-divider></v-divider>
-        <v-stepper-item :complete="activeStep > 2" :title="$t('AddGamePage.pleaseInputSpecialCodeEmptyIfNotNeeded')"
-          value="2" step="2">
+        <v-stepper-item
+          :complete="activeStep > 2"
+          :title="$t('AddGamePage.pleaseInputSpecialCodeEmptyIfNotNeeded')"
+          value="2"
+          step="2"
+        >
         </v-stepper-item>
       </v-stepper-header>
       <v-stepper-window>
@@ -16,7 +25,8 @@
         <div v-if="activeStep === 1" :step="activeStep">
           <component :class="animationClass" :is="AddGameEffectCardOne" :key="activeStep" />
           <v-btn class="nextButton" color="success" @click="handleNext">{{
-    $t('AddGamePage.nextStep') }}</v-btn>
+            $t('AddGamePage.nextStep')
+          }}</v-btn>
         </div>
         <!-- 步骤二 -->
         <div v-if="activeStep === 2" :step="activeStep">
@@ -28,22 +38,28 @@
         </div>
       </v-stepper-window>
     </v-stepper>
-    <v-snackbar v-model="showSnackSuccess" color="snackBar" :timeout="4000" transition="fade-transition">
+    <v-snackbar
+      v-model="showSnackSuccess"
+      color="snackBar"
+      :timeout="4000"
+      transition="fade-transition"
+    >
       <v-icon left>mdi-emoticon-wink</v-icon>
       {{ $t('AddGamePage.gameAdded') }}: {{ receiveGameName }}
       <template v-slot:actions>
-        <v-btn color="primary" variant="text" @click="showSnackSuccess = false">
-          Close
-        </v-btn>
+        <v-btn color="primary" variant="text" @click="showSnackSuccess = false"> Close </v-btn>
       </template>
     </v-snackbar>
-    <v-snackbar v-model="sameSnackSuccess" color="sameSncakBar" :timeout="4000" transition="fade-transition">
+    <v-snackbar
+      v-model="sameSnackSuccess"
+      color="sameSncakBar"
+      :timeout="4000"
+      transition="fade-transition"
+    >
       <v-icon left>mdi-emoticon-cry</v-icon>
       {{ $t('AddGamePage.hasSameGame') }}: {{ receiveGameName }}
       <template v-slot:actions>
-        <v-btn color="primary" variant="text" @click="sameSnackSuccess = false">
-          Close
-        </v-btn>
+        <v-btn color="primary" variant="text" @click="sameSnackSuccess = false"> Close </v-btn>
       </template>
     </v-snackbar>
   </YkPageContent>
@@ -56,14 +72,14 @@ import { ref, computed, watch, onMounted, onBeforeUnmount, getCurrentInstance } 
 import { configStore } from '@/renderer/store/config'
 import IpcTypes from '@/common/IpcTypes'
 import * as _ from 'lodash'
-import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const useConfigStore = configStore()
 const showSnackSuccess = ref(false)
 const sameSnackSuccess = ref(false)
 const receiveGameName = ref('')
-const instance = getCurrentInstance();
-const vuetify3_dialog = instance?.appContext.config.globalProperties.$dialog;
+const instance = getCurrentInstance()
+const vuetify3_dialog = instance?.appContext.config.globalProperties.$dialog
 // 控制v-stepper的值
 const activeStep = ref(1)
 // 控制类名
@@ -98,9 +114,8 @@ const handleNext = () => {
       }
       // 清空数据
       useConfigStore.resetGame()
-      activeStep.value = 1;   // 重置步骤
-    }
-    catch (e) {
+      activeStep.value = 1 // 重置步骤
+    } catch (e) {
       console.log(e)
     }
   }

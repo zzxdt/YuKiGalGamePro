@@ -6,26 +6,26 @@ declare namespace yuki {
   type TempLocaleChangerItem = yuki.Config.localeChangerItem & { id: string }
 
   export interface TextOutputObject extends TextThread {
-    text: string,
-    formattedText?: string; // 格式化后的文本
+    text: string
+    formattedText?: string // 格式化后的文本
   }
   export interface TextThread {
-    handle: number; // hook index
-    pid: number; // process ID
-    addr: number; // hook address
-    ctx: number; // hook context
-    ctx2: number; // hook context 2
-    name: string; // hook name
-    code: string; // hook code
-    text: string; // output text
+    handle: number // hook index
+    pid: number // process ID
+    addr: number // hook address
+    ctx: number // hook context
+    ctx2: number // hook context 2
+    name: string // hook name
+    code: string // hook code
+    text: string // output text
   }
   export interface MeCabResult {
-    word: string; // 分词
-    reading: string; // 读音（平假名）
-    romaji: string; // 罗马字
-    pos: string; // 词性
-    baseForm: string; // 基本形式
-    verbType?: string;
+    word: string // 分词
+    reading: string // 读音（平假名）
+    romaji: string // 罗马字
+    pos: string // 词性
+    baseForm: string // 基本形式
+    verbType?: string
   }
   export interface TranslationMessage {
     id: number
@@ -40,7 +40,7 @@ declare namespace yuki {
   }
   export interface ConfigState {
     default: yuki.Config.Default
-    games: Game[],
+    games: Game[]
     texts: yuki.Config.Texts
     librariesBaseStorePath: string
   }

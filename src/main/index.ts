@@ -3,8 +3,7 @@ import Constants from './utils/Constants'
 import path from 'path'
 import { createErrorWindow, createMainWindow } from './MainRunner'
 import { macOSDisableDefaultMenuItem } from './utils/Menus'
-require('dotenv').config();
-require('@electron/remote/main').initialize();
+require('@electron/remote/main').initialize()
 let mainWindow
 let errorWindow
 app.on('ready', async () => {
@@ -14,7 +13,7 @@ app.on('ready', async () => {
 
   macOSDisableDefaultMenuItem()
   mainWindow = await createMainWindow(mainWindow)
-  require('@electron/remote/main').enable(mainWindow.webContents);
+  require('@electron/remote/main').enable(mainWindow.webContents)
 })
 
 app.on('activate', async () => {
@@ -31,32 +30,43 @@ app.on('window-all-closed', () => {
   }
 })
 app.whenReady().then(() => {
-  const pathyuki = path.resolve(__dirname, '../../src/renderer/asserts/icon/whiteyuki.png')
-  const homeyuki = path.resolve(__dirname, '../../src/renderer/asserts/icon/home.png')
-  const exityuiki = path.resolve(__dirname, '../../src/renderer/asserts/icon/exit.png')
-  let tray = new Tray(pathyuki);
+  let pathyuki: any
+  let homeyuki: any
+  let exityuiki: any
+  if (Constants.IS_DEV_ENV) {
+    pathyuki = path.resolve(__dirname, '../../static/images/whiteyuki.png')
+    homeyuki = path.resolve(__dirname, '../../static/images/home.png')
+    exityuiki = path.resolve(__dirname, '../../static/images/exit.png')
+  } else {
+    pathyuki = path.resolve(__dirname, '../whiteyuki.png')
+    homeyuki = path.resolve(__dirname, '../home.png')
+    exityuiki = path.resolve(__dirname, '../exit.png')
+  }
+  let tray = new Tray(pathyuki)
   const contextMenu = Menu.buildFromTemplate([
     {
       label: '打开主界面',
       icon: homeyuki,
       click: function () {
-        mainWindow.show();
+        if (mainWindow) {
+          mainWindow.show()
+        }
       }
     },
     {
       label: '退出',
       icon: exityuiki,
       click: function () {
-        app.quit();
+        app.quit()
       }
     }
-  ]);
-  tray.setToolTip('YuKiGalGameE');
-  tray.setTitle('Open YuKiGalGameE')
-  tray.setContextMenu(contextMenu);
+  ])
+  tray.setToolTip('YuKiGalGamePro')
+  tray.setTitle('Open YuKiGalGamePro')
+  tray.setContextMenu(contextMenu)
   tray.on('click', () => {
-    mainWindow.show();
-  });
+    mainWindow.show()
+  })
 })
 process.on('uncaughtException', () => {
   errorWindow = createErrorWindow(errorWindow, mainWindow)

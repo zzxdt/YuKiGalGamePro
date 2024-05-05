@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 interface debugMessage {
-  level: string,
-  message: string,
+  level: string
+  message: string
   meta: any
 }
 const MAX_DEBUG_MESSAGES_COLUMNS = 1000
@@ -10,7 +10,7 @@ const guiStore = defineStore('Gui', {
     noGame: true,
     debugMessages: [],
     isGameStartingEnded: false,
-    processes: [],
+    processes: []
   }),
   getters: {
     getProcessesWithText: (state: yuki.GuiState) => () => {

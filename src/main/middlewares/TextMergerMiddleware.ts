@@ -1,6 +1,6 @@
 // 合并中间件
 const debug = require('debug')('yuki:merger')
-// 
+//
 interface ITextStore {
   [handle: number]: string[]
 }
@@ -19,7 +19,7 @@ export default class TextMergerMiddleware implements yuki.Middleware<yuki.TextOu
   constructor(config: yuki.Config.Texts['merger']) {
     this.enable = config.enable
     if (!this.enable) {
-        debug('TextMergeMiddleware is unable!')
+      debug('TextMergeMiddleware is unable!')
     }
     this.timeout = config.timeout ? config.timeout : TextMergerMiddleware.DEFAULT_TIMEOUT
   }
@@ -33,18 +33,18 @@ export default class TextMergerMiddleware implements yuki.Middleware<yuki.TextOu
       return
     }
     if (!this.textStore[context.handle]) {
-      this.textStore[context.handle] = [context.text];
-      this.threadStore[context.handle] = context;
+      this.textStore[context.handle] = [context.text]
+      this.threadStore[context.handle] = context
       setTimeout(async () => {
-        const mergedText = this.textStore[context.handle].join('').replace(/[\r\n]/g, '');
-          debug('the mergeText is:',mergedText)
-        context.text = mergedText;
-        delete this.textStore[context.handle]; // 清理存储
+        const mergedText = this.textStore[context.handle].join('').replace(/[\r\n]/g, '')
+        debug('the mergeText is:', mergedText)
+        context.text = mergedText
+        delete this.textStore[context.handle] // 清理存储
         this.threadStore[context.handle] = undefined
-        await next(context);
+        await next(context)
       }, this.timeout)
     } else {
-      this.textStore[context.handle].push(context.text);
+      this.textStore[context.handle].push(context.text)
     }
   }
 }

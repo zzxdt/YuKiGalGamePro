@@ -32,7 +32,7 @@ export default class TextInterceptorMiddleware implements yuki.Middleware<yuki.T
     return text.length > this.maxLength
   }
   private removeIgnorePatterns(text: string) {
-    this.shouldBeIgnorePatterns.forEach(pattern => {
+    this.shouldBeIgnorePatterns.forEach((pattern) => {
       text = text.replace(new RegExp(pattern, 'g'), '')
     })
     return text

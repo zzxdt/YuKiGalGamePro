@@ -24,5 +24,5 @@ export default class Constants {
   static APP_INDEX_URL_DEV = 'http://localhost:5173/index.html'
   static APP_INDEX_URL_PROD = join(__dirname, '../index.html')
   static APP_TRANSLATOR_URL_DEV = 'http://localhost:5173/translator/translator.html'
-  static APP_TRANSLATOR_URL_PROD = join(__dirname, '../translator/translator.html')
+  static APP_TRANSLATOR_URL_PROD = join(__dirname, '../translate.html')
 }

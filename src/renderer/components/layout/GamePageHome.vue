@@ -7,22 +7,33 @@
       <v-btn small dark @click="startFromProcess">{{ $t('GamesPage.startFromProcess') }}</v-btn>
     </v-toolbar>
     <!-- 弹出框dialog -->
-    <v-dialog v-model="showDialog" :overlay="false" max-width="640px" transition="dialog-transition">
+    <v-dialog
+      v-model="showDialog"
+      :overlay="false"
+      max-width="640px"
+      transition="dialog-transition"
+    >
       <v-card>
         <v-card-title primary-title>
           <span class="custom-text">{{ $t('GamesPage.startFromProcess') }}</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-xs>
-            <v-autocomplete variant="underlined" :items="GuiStore.getProcessesWithText()"
-              :label="$t('mainSilderBar.selectProcess')" v-model="selectedProcess" item-value="pid" item-title="text"
-              return-object>
+            <v-autocomplete
+              variant="underlined"
+              :items="GuiStore.getProcessesWithText()"
+              :label="$t('mainSilderBar.selectProcess')"
+              v-model="selectedProcess"
+              item-value="pid"
+              item-title="text"
+              return-object
+            >
             </v-autocomplete>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" @click="closeDialog">{{
-    $t('mainSilderBar.cancel')
-  }}</v-btn>
+                $t('mainSilderBar.cancel')
+              }}</v-btn>
               <v-btn color="blue darken-1" @click="startGame">{{ $t('GamesPage.start') }}</v-btn>
             </v-card-actions>
           </v-container>
@@ -87,14 +98,15 @@ const onProcessesUpdate = () => {
   width: 90vw;
   margin-top: 20px;
   border-radius: 6px;
-  max-width: 100%;  height: 60px;
+  max-width: 100%;
+  height: 60px;
 }
 
 .v-btn {
   min-height: 22px;
   font-size: 0.8rem;
 }
-.custom-text{
+.custom-text {
   height: 20px;
 }
 </style>

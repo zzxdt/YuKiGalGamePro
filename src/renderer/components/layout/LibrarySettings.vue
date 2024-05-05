@@ -5,7 +5,9 @@
       <YkPageContent>
         <v-container grid-list-xs>
           <v-row>
-            <v-icon size="large" :color="getRedisStatus ? 'success' : 'error'">mdi-database-cog-outline</v-icon>
+            <v-icon size="large" :color="getRedisStatus ? 'success' : 'error'"
+              >mdi-database-cog-outline</v-icon
+            >
           </v-row>
           <v-row>
             <v-col sm="12" md="4" lg="4" class="d-flex align-center justify-center">
@@ -15,25 +17,45 @@
               </span>
             </v-col>
             <v-col sm="12" md="8" lg="8">
-              <v-text-field v-model="search" name="redis" :label="$t('LibrarySettings.search')" density="compact" flat
-                hide-details single-line :hint="$t('LibrarySettings.inputWord')" prepend-inner-icon="mdi-magnify"
-                variant="solo-filled"></v-text-field>
+              <v-text-field
+                v-model="search"
+                name="redis"
+                :label="$t('LibrarySettings.search')"
+                density="compact"
+                flat
+                hide-details
+                single-line
+                :hint="$t('LibrarySettings.inputWord')"
+                prepend-inner-icon="mdi-magnify"
+                variant="solo-filled"
+              ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
             <v-col sm="12" md="4" lg="3" class="d-flex align-center justify-center">
-              <v-btn color="success" @click="getAllwordFromRedis">{{ $t('LibrarySettings.checkAllWord') }}</v-btn>
+              <v-btn color="success" @click="getAllwordFromRedis">{{
+                $t('LibrarySettings.checkAllWord')
+              }}</v-btn>
             </v-col>
             <v-col sm="12" md="4" lg="3" class="d-flex align-center justify-center">
-              <v-btn color="error" @click="showDeletAllDialog">{{ $t('LibrarySettings.deleteAllWord') }}</v-btn>
+              <v-btn color="error" @click="showDeletAllDialog">{{
+                $t('LibrarySettings.deleteAllWord')
+              }}</v-btn>
             </v-col>
             <v-col sm="12" md="4" lg="3" class="d-flex align-center justify-center">
-              <v-btn color="warning" @click="showQuitDialog">{{ $t('LibrarySettings.quit') }}</v-btn>
+              <v-btn color="warning" @click="showQuitDialog">{{
+                $t('LibrarySettings.quit')
+              }}</v-btn>
             </v-col>
           </v-row>
           <v-row>
-            <v-data-table :headers="headers" :items-per-page="5" class="elevation-1" :items="useRedisStore.wordInfo"
-              :search="search">
+            <v-data-table
+              :headers="headers"
+              :items-per-page="5"
+              class="elevation-1"
+              :items="useRedisStore.wordInfo"
+              :search="search"
+            >
               <template v-slot:item="{ item }">
                 <tr>
                   <td>{{ item.key }}</td>
@@ -50,8 +72,12 @@
     </v-lazy>
     <v-dialog v-model="deleteAllDialog" width="400px" transition="dialog-transition">
       <v-card>
-        <v-card-title class="d-flex justify-center pa-4">{{ $t('LibrarySettings.deleteAllWord') }}</v-card-title>
-        <v-card-subtitle class="d-flex justify-center pa-2">{{ $t('LibrarySettings.sureDeleteAll') }}</v-card-subtitle>
+        <v-card-title class="d-flex justify-center pa-4">{{
+          $t('LibrarySettings.deleteAllWord')
+        }}</v-card-title>
+        <v-card-subtitle class="d-flex justify-center pa-2">{{
+          $t('LibrarySettings.sureDeleteAll')
+        }}</v-card-subtitle>
         <v-card-actions class="d-flex justify-space-around pa-4">
           <v-btn color="error" @click="confirmDeletion">{{ $t('LibrarySettings.sure') }}</v-btn>
           <v-btn color="info" @click="cancelDelete">{{ $t('LibrarySettings.cancel') }}</v-btn>
@@ -60,8 +86,12 @@
     </v-dialog>
     <v-dialog v-model="quitDialog" width="400px" transition="dialog-transition">
       <v-card>
-        <v-card-title class="d-flex justify-center pa-4">{{ $t('LibrarySettings.quit') }}</v-card-title>
-        <v-card-subtitle class="d-flex justify-center pa-2">{{ $t('LibrarySettings.sureQuit') }}</v-card-subtitle>
+        <v-card-title class="d-flex justify-center pa-4">{{
+          $t('LibrarySettings.quit')
+        }}</v-card-title>
+        <v-card-subtitle class="d-flex justify-center pa-2">{{
+          $t('LibrarySettings.sureQuit')
+        }}</v-card-subtitle>
         <v-card-actions class="d-flex justify-space-around pa-4">
           <v-btn color="error" @click="confirmQuit">{{ $t('LibrarySettings.sure') }}</v-btn>
           <v-btn color="info" @click="cancelQuit">{{ $t('LibrarySettings.cancel') }}</v-btn>
@@ -72,12 +102,12 @@
 </template>
 
 <script setup lang="ts">
-import { YkPageHeader, YkPageContent } from '.';
-import IpcTypes from '@/common/IpcTypes';
+import { YkPageHeader, YkPageContent } from '.'
+import IpcTypes from '@/common/IpcTypes'
 import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import { redisStore } from '@/renderer/store/controlRedis'
 const useRedisStore = redisStore()
-const host = ref("127.0.0.1:6379")
+const host = ref('127.0.0.1:6379')
 const search = ref('')
 //定义数据表格头部
 const headers = [
@@ -86,7 +116,7 @@ const headers = [
   { title: 'Audio URL', value: 'value.audioUrl' },
   { title: 'reading', value: 'value.reading' },
   { title: 'romaji', value: 'value.romaji' }
-];
+]
 const getRedisStatus = computed(() => useRedisStore.getRedisStart)
 const deleteAllDialog = ref(false)
 const quitDialog = ref(false)
@@ -144,11 +174,11 @@ p {
 .local:hover {
   color: #fff;
   /* 文本颜色 */
-  filter: drop-shadow(0 0 5px #C8E6C9) drop-shadow(0 0 10px #A5D6A7);
+  filter: drop-shadow(0 0 5px #c8e6c9) drop-shadow(0 0 10px #a5d6a7);
 }
 
 .port:hover {
   color: #fff;
-  filter: drop-shadow(0 0 5px #B3E5FC) drop-shadow(0 0 10px #4FC3F7);
+  filter: drop-shadow(0 0 5px #b3e5fc) drop-shadow(0 0 10px #4fc3f7);
 }
 </style>
