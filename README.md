@@ -1,6 +1,6 @@
 <div align="center">
 
-![vutron-logo](src/renderer/public/images/vutron-logo.webp)
+![yuki-logo](static/example/whiteyuki.webp)
 
 ---
 
