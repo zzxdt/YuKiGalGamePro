@@ -5,6 +5,7 @@
 > + ### 💡[Mecab](#Mecab配置)  
 >
 这些是基本配置,对于每个配置我都会进行讲解
+##### 所有安装包的连接在这:<a href="https://github.com/zzxdt/yukigalgameproconfigeration/releases/tag/file" style="color: blue" >下载连接</a>
 #### AnKi配置
 #### 两种方法:
  + ✅.直接使用库中的包
@@ -25,21 +26,21 @@
 >![](static/userGuide/ankiOne.PNG)
 >****
 >也是在管理笔记模板(Ctrol+Shift+N)页面下→点击卡片
-> ```html
+```
 > 1.正面内容模板
  <span style="font-size: 60px; ">
  <div class=jp> {{furigana:reading}}</div>
  <div class=text>{{text}}</div>
  <div class=audio>{{audioUrl}}</div>
  <hr id=answer>
-
-> ```html  
-> 2.背面卡片内容
+```
+```
+ > 2.背面卡片内容
  <span style="font-size: 32px; ">
  <div class=jp></div>
  {{translation}}<br>
-
-> ```html  
+```
+```
 > 3.样式
  .card {
   font-family: arial;
@@ -61,8 +62,10 @@
   font-size: 40px;
   text-align: center;
   }
+```
+> **卡片模板:**  
+最好保持只有一个卡片模板！
 
-> **卡片模板是:**最好保持只有一个卡片模板！
 >![](static/userGuide/ankitwo.PNG)  
 >****
 >**最后一步**
@@ -128,7 +131,8 @@ cmd输入:**wsl --install -d Ubuntu-20.04(或者其他版本)**
 style="color: red" >有道翻译申请</a>  
 >然后打开**/resources/translateApi/OpenBaidu.js和YouDaoApi.js**  
 填写好对应的**密钥**和**id**  
-> 2. 配置default.json  
+> 2.**(可选)(如果配置转区工具需要管理员身份运行!翻译器内部可更改！)**   
+配置default.json  
 >在这里你需要下载一个转区工具  
 ><a href="https://github.com/xupefei/Locale-Emulator/releases/tag/v2.5.0.1"
 style="color: red" >点击跳转</a>  
@@ -138,18 +142,14 @@ style="color: red" >点击跳转</a>
 
 > 4. 打开cmd 输入redis-cli检查redis是否接入,这是接入好的样子
 ![](static/userGuide/redis.PNG)
->打开软件
+> 5.打开软件
 ![](static/userGuide/yukitran.PNG)
 点击这个笔把LEProce.exe添加进去,重启软件,打开时**右击以管理员身份运行**
 
-> 5. 和原yuki一样可以从进程直接启动,也可以添加游戏启动
->![](static/userGuide/yukiOne.PNG)
->
->
+> 5. 和原yuki一样可以从进程直接启动,也可以添加游戏启动  
+> ![](static/userGuide/yukiOne.PNG)
 >添加游戏成功,在游戏列表中启动，选中转区工具然后点击上方的保存,然后就可以直接运行游戏了!
-
 >![](static/userGuide/yukiset.PNG)
 
-#### 对于设置字体以及背景颜色,以及控制文本暂停翻译,在启动游戏后的翻译窗口
-
+#### 对于设置字体以及背景颜色,以及控制文本暂停翻译,在启动游戏后的翻译窗口，设置完成后请点击，锁头标志右面的摁扭保存，在跳转至翻译界面即可！
 ![](static/userGuide/setting.PNG)
